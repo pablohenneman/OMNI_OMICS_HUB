@@ -1,0 +1,462 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Workspace - Prototype V2</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app">
+      <nav class="nav">
+        <h2>OmicsWorkspace</h2>
+        <a href="omics-dashboard.html">Home</a>
+        <details open>
+          <summary>Data</summary>
+          <div class="submenu">
+            <a href="workspace.html?step=step0">Configuration <span class="badge success">Completed</span></a>
+            <button class="muted" data-step="step0">Step 0 - Properties</button>
+            <button class="muted" data-step="step1">Step 1 - Import</button>
+            <button class="muted" data-step="step2">Step 2 - Column Mapping</button>
+            <button class="muted" data-step="step3">Step 3 - RowData</button>
+            <button class="muted" data-step="step4">Step 4 - Sample Metadata</button>
+            <a href="workspace.html?step=filtering">Preprocessing <span class="badge success">Completed</span></a>
+            <button class="muted" data-step="filtering">Filtering</button>
+            <button class="muted" data-step="normalization">Normalization</button>
+            <button class="muted" data-step="impute">Impute/Scale</button>
+            <button class="muted" data-step="dimred">Dim Reduction</button>
+          </div>
+        </details>
+        <a href="#" class="muted">Results <span class="badge">Post-V1</span></a>
+      </nav>
+
+      <main class="page">
+        <div class="topbar">
+          <div>
+            <div class="brand">Proteomics Pilot</div>
+            <div class="section-subtitle">LFQ_Study_A - Config and Preprocess</div>
+          </div>
+          <div style="display: flex; gap: 12px;">
+            <a class="btn secondary" href="omics-dashboard.html">Back to Dashboard</a>
+            <button class="btn applied">Applied</button>
+          </div>
+        </div>
+
+        <section class="panel">
+          <div class="section-title">Progress</div>
+          <div class="progress-stack">
+            <div class="progress-row">
+              <span class="step completed">Step 0 - Properties</span>
+              <span class="step completed">Step 1 - Import</span>
+              <span class="step completed">Step 2 - Column Mapping</span>
+              <span class="step completed">Step 3 - RowData</span>
+              <span class="step completed">Step 4 - Sample Metadata</span>
+            </div>
+            <div class="progress-row">
+              <span class="step completed">Filtering</span>
+              <span class="step completed">Normalization</span>
+              <span class="step completed">Impute/Scale</span>
+              <span class="step completed">Dim Reduction</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel" style="margin-top: 16px;">
+          <div class="tabs">
+            <button class="tab" data-step="step0">Step 0</button>
+            <button class="tab" data-step="step1">Step 1</button>
+            <button class="tab" data-step="step2">Step 2</button>
+            <button class="tab" data-step="step3">Step 3</button>
+            <button class="tab" data-step="step4">Step 4</button>
+            <button class="tab" data-step="filtering">Filtering</button>
+            <button class="tab" data-step="normalization">Normalization</button>
+            <button class="tab" data-step="impute">Impute/Scale</button>
+            <button class="tab" data-step="dimred">Dim Reduction</button>
+          </div>
+          <div class="notice" style="margin-top: 12px;">All steps are completed. Editing would mark the flow as dirty.</div>
+        </section>
+
+        <section class="module active" data-module="step0">
+          <div class="workspace" style="margin-top: 24px;">
+            <div class="panel">
+              <div class="section-title">Step 0 - Dataset Properties</div>
+              <p class="section-subtitle">Define the workspace context before import.</p>
+              <div class="field">
+                <label>Workspace Name</label>
+                <input class="input" value="LFQ_Study_A" />
+              </div>
+              <div class="field">
+                <label>Modality</label>
+                <input class="input" value="Bulk" />
+              </div>
+              <div class="field">
+                <label>Data Type</label>
+                <input class="input" value="LFQ Proteomics" />
+              </div>
+              <div class="field">
+                <label>Acquisition Mode</label>
+                <input class="input" value="DIA" />
+              </div>
+              <details>
+                <summary class="section-title" style="font-size: 16px;">Advanced Options</summary>
+                <div class="field">
+                  <label>Project Description</label>
+                  <input class="input" value="Baseline LFQ preprocessing validation" />
+                </div>
+              </details>
+              <div class="notice warning">Changing properties may invalidate downstream steps.</div>
+            </div>
+
+            <div class="panel">
+              <div class="section-title">Properties Summary</div>
+              <div class="list">
+                <div class="item">Workspace Name: LFQ_Study_A</div>
+                <div class="item">Modality: Bulk</div>
+                <div class="item">Data Type: LFQ Proteomics</div>
+                <div class="item">Context: DIA, human</div>
+              </div>
+              <div class="plot" style="margin-top: 16px;">Gating summary and state banner</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="module" data-module="step1">
+          <div class="workspace" style="margin-top: 24px;">
+            <div class="panel">
+              <div class="section-title">Step 1 - Import and Parsing</div>
+              <p class="section-subtitle">Parsed table and preview are already stored.</p>
+              <div class="field">
+                <label>Source File</label>
+                <input class="input" value="LFQ_Study_A.tsv" />
+              </div>
+              <div class="field">
+                <label>Delimiter</label>
+                <input class="input" value="Tab" />
+              </div>
+              <div class="field">
+                <label>NA Tokens</label>
+                <input class="input" value="NA, NULL, " />
+              </div>
+              <details>
+                <summary class="section-title" style="font-size: 16px;">Advanced Options</summary>
+                <div class="field">
+                  <label>Header</label>
+                  <input class="input" value="True" />
+                </div>
+              </details>
+              <div class="notice">Parsing completed. Preview snapshot saved.</div>
+            </div>
+
+            <div class="panel">
+              <div class="section-title">Parsed Preview</div>
+              <div class="plot">Preview table (first 10 rows)</div>
+              <div class="list" style="margin-top: 16px;">
+                <div class="item">Rows: 4,120</div>
+                <div class="item">Columns: 48</div>
+                <div class="item">Missingness: 3.2 percent</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="module" data-module="step2">
+          <div class="workspace" style="margin-top: 24px;">
+            <div class="panel">
+              <div class="section-title">Step 2 - Column Mapping</div>
+              <p class="section-subtitle">Assign columns to RowData, Ignore, or Expression.</p>
+              <div class="field">
+                <label>Search Columns</label>
+                <input class="input" placeholder="Search across all columns" />
+              </div>
+              <div class="grid three" style="gap: 12px;">
+                <div class="panel soft">
+                  <strong>RowData</strong>
+                  <div class="list" style="margin-top: 8px;">
+                    <div class="item">protein_id</div>
+                    <div class="item">gene_symbol</div>
+                  </div>
+                </div>
+                <div class="panel soft">
+                  <strong>Ignore</strong>
+                  <div class="list" style="margin-top: 8px;">
+                    <div class="item">confidence_score</div>
+                    <div class="item">extra_notes</div>
+                  </div>
+                </div>
+                <div class="panel soft">
+                  <strong>Expression</strong>
+                  <div class="list" style="margin-top: 8px;">
+                    <div class="item">sample_A</div>
+                    <div class="item">sample_B</div>
+                    <div class="item">sample_C</div>
+                  </div>
+                </div>
+              </div>
+              <details style="margin-top: 16px;">
+                <summary class="section-title" style="font-size: 16px;">Advanced Options</summary>
+                <div class="field">
+                  <label>Include Columns That Contain</label>
+                  <input class="input" value="Intensity" />
+                </div>
+              </details>
+              <div class="notice warning">Conflicts are resolved. All expression columns are numeric.</div>
+            </div>
+
+            <div class="panel">
+              <div class="section-title">Preview and Validation</div>
+              <div class="plot">Preview table with selected columns</div>
+              <div class="notice" style="margin-top: 16px;">Column mapping summary saved.</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="module" data-module="step3">
+          <div class="workspace" style="margin-top: 24px;">
+            <div class="panel">
+              <div class="section-title">Step 3 - RowData and Feature Mapping</div>
+              <div class="field">
+                <label>ID Column</label>
+                <input class="input" value="protein_id" />
+              </div>
+              <div class="field">
+                <label>Delimiter</label>
+                <input class="input" value=";" />
+              </div>
+              <div class="field">
+                <label>ID Type</label>
+                <input class="input" value="uniprot" />
+              </div>
+              <div class="field">
+                <label>Species</label>
+                <input class="input" value="human" />
+              </div>
+              <details>
+                <summary class="section-title" style="font-size: 16px;">Advanced Options</summary>
+                <div class="field">
+                  <label>Dedupe Policy</label>
+                  <input class="input" value="Append .1 .2" />
+                </div>
+              </details>
+              <div class="notice">Mapping provenance saved to workspace object.</div>
+            </div>
+
+            <div class="panel">
+              <div class="section-title">Mapping Coverage</div>
+              <div class="plot">Coverage summary and multi-mapping rate</div>
+              <div class="list" style="margin-top: 16px;">
+                <div class="item">Mapped: 92 percent</div>
+                <div class="item">Multi-mapped: 4 percent</div>
+                <div class="item">Unmapped: 4 percent</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="module" data-module="step4">
+          <div class="workspace" style="margin-top: 24px; grid-template-columns: 420px 1fr;">
+            <div class="panel">
+              <div class="section-title">Step 4 - Sample Metadata Builder</div>
+              <p class="section-subtitle">Define sample traits and identities.</p>
+              <div class="field">
+                <label>Active Identity Column</label>
+                <input class="input" value="condition" />
+              </div>
+              <div class="field">
+                <label>Label Column</label>
+                <input class="input" value="sample_label" />
+              </div>
+              <div class="field">
+                <label>Replicate Column</label>
+                <input class="input" value="replicate" />
+              </div>
+
+              <div class="section-title" style="font-size: 16px; margin-top: 16px;">Trait Columns</div>
+              <div class="list">
+                <div class="item">condition</div>
+                <div class="item">tissue</div>
+                <div class="item">batch</div>
+              </div>
+              <div class="notice warning" style="margin-top: 12px;">Unmatched samples: 0 (required to proceed).</div>
+              <div style="display: flex; gap: 12px; margin-top: 12px;">
+                <button class="btn secondary">Create Column</button>
+                <button class="btn ghost">Delete Column</button>
+              </div>
+            </div>
+
+            <div class="panel">
+              <div class="section-title">Builder - condition</div>
+              <div class="grid two">
+                <div>
+                  <div class="field">
+                    <label>Group Value</label>
+                    <input class="input" value="Treatment" />
+                  </div>
+                  <div class="field">
+                    <label>Match Rule</label>
+                    <input class="input" value="regex: _T_" />
+                  </div>
+                  <div class="notice">Matched: 24 samples</div>
+                </div>
+                <div>
+                  <div class="field">
+                    <label>Group Value</label>
+                    <input class="input" value="Control" />
+                  </div>
+                  <div class="field">
+                    <label>Match Rule</label>
+                    <input class="input" value="regex: _C_" />
+                  </div>
+                  <div class="notice">Matched: 24 samples</div>
+                </div>
+              </div>
+              <div class="plot" style="margin-top: 16px;">Live sample table preview</div>
+              <div class="notice" style="margin-top: 12px;">Overlaps are blocked. Changes update the table live.</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="module" data-module="filtering">
+          <div class="workspace" style="margin-top: 24px;">
+            <div class="panel">
+              <div class="section-title">Filtering</div>
+              <p class="section-subtitle">Sample and feature filters are stored.</p>
+              <div class="field">
+                <label>Sample Filter</label>
+                <input class="input" value="Keep all" />
+              </div>
+              <div class="field">
+                <label>Feature Presence Threshold</label>
+                <input class="input" value="Min 70 percent" />
+              </div>
+              <details>
+                <summary class="section-title" style="font-size: 16px;">Advanced Options</summary>
+                <div class="field">
+                  <label>Group-Aware Filtering</label>
+                  <input class="input" value="condition" />
+                </div>
+              </details>
+              <div class="notice">Filtering masks saved to provenance.</div>
+            </div>
+
+            <div class="panel">
+              <div class="section-title">QC Feedback</div>
+              <div class="plot">Sample intensity distribution with cutoffs</div>
+              <div class="plot" style="margin-top: 16px;">Feature presence histogram</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="module" data-module="normalization">
+          <div class="workspace" style="margin-top: 24px;">
+            <div class="panel">
+              <div class="section-title">Normalization</div>
+              <div class="field">
+                <label>Log2 Transform</label>
+                <input class="input" value="On (locked)" />
+              </div>
+              <div class="field">
+                <label>Method</label>
+                <input class="input" value="None" />
+              </div>
+              <details>
+                <summary class="section-title" style="font-size: 16px;">Advanced Options</summary>
+                <div class="field">
+                  <label>VSN</label>
+                  <input class="input" value="Disabled" />
+                </div>
+              </details>
+              <div class="notice">Normalization settings recorded.</div>
+            </div>
+
+            <div class="panel">
+              <div class="section-title">Density and Boxplots</div>
+              <div class="plot">Density curves (raw, log2, method)</div>
+              <div class="plot" style="margin-top: 16px;">Boxplot by active identity</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="module" data-module="impute">
+          <div class="workspace" style="margin-top: 24px;">
+            <div class="panel">
+              <div class="section-title">Imputation and Scaling</div>
+              <div class="field">
+                <label>Imputation Method</label>
+                <input class="input" value="MinProb" />
+              </div>
+              <div class="field">
+                <label>Seed</label>
+                <input class="input" value="1234" />
+              </div>
+              <div class="field">
+                <label>Scaling</label>
+                <input class="input" value="Center + Scale" />
+              </div>
+              <details>
+                <summary class="section-title" style="font-size: 16px;">Advanced Options</summary>
+                <div class="field">
+                  <label>Missingness Mask</label>
+                  <input class="input" value="Stored" />
+                </div>
+              </details>
+              <div class="notice">Imputation and scaling saved with provenance.</div>
+            </div>
+
+            <div class="panel">
+              <div class="section-title">Missingness and Heatmap</div>
+              <div class="plot">Before/after missingness</div>
+              <div class="plot" style="margin-top: 16px;">Heatmap placeholder</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="module" data-module="dimred">
+          <div class="workspace" style="margin-top: 24px;">
+            <div class="panel">
+              <div class="section-title">Variable Features and Dimensionality Reduction</div>
+              <div class="field">
+                <label>Variable Feature Method</label>
+                <input class="input" value="Seurat-style" />
+              </div>
+              <div class="field">
+                <label>Top N Features</label>
+                <input class="input" value="2000" />
+              </div>
+              <div class="field">
+                <label>PCA Components</label>
+                <input class="input" value="50" />
+              </div>
+              <div class="field">
+                <label>Selected PCs</label>
+                <input class="input" value="10" />
+              </div>
+              <div class="field">
+                <label>UMAP</label>
+                <input class="input" value="Enabled" />
+              </div>
+              <details>
+                <summary class="section-title" style="font-size: 16px;">Advanced Options</summary>
+                <div class="field">
+                  <label>t-SNE</label>
+                  <input class="input" value="Disabled" />
+                </div>
+              </details>
+              <div class="notice">Dimensionality reduction outputs saved.</div>
+            </div>
+
+            <div class="panel">
+              <div class="section-title">Plots</div>
+              <div class="plot">Rank plot for variable features</div>
+              <div class="plot" style="margin-top: 16px;">Elbow plot and PCA scatter</div>
+              <div class="plot" style="margin-top: 16px;">UMAP or t-SNE scatter</div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+    <script src="app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>OmicsWorkspace Dashboard - OMNI OMICS HUB</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app">
+      <nav class="nav">
+        <h2>OmicsWorkspace</h2>
+        <a class="active" href="omics-dashboard.html">Home</a>
+        <details open>
+          <summary>Data</summary>
+          <div class="submenu">
+            <span>Configuration <span class="badge active">Step 2</span></span>
+            <span class="muted">Step 0 - Properties</span>
+            <span class="muted">Step 1 - Import</span>
+            <span class="muted">Step 2 - Column Mapping</span>
+            <span class="muted">Step 3 - RowData</span>
+            <span class="muted">Step 4 - Sample Metadata</span>
+            <span>Preprocessing <span class="badge locked">Locked</span></span>
+            <span class="muted">Filtering</span>
+            <span class="muted">Normalization</span>
+            <span class="muted">Impute/Scale</span>
+            <span class="muted">Dim Reduction</span>
+          </div>
+        </details>
+        <a href="#" class="muted">Results <span class="badge locked">Post-V1</span></a>
+      </nav>
+
+      <main class="page">
+        <div class="topbar">
+          <div>
+            <div class="brand">Proteomics Pilot</div>
+            <div class="section-subtitle">OmicsWorkspace - LFQ_Study_A</div>
+          </div>
+          <div style="display: flex; gap: 12px;">
+            <a class="btn secondary" href="project-dashboard.html">Back to Project</a>
+            <a class="btn" href="workspace.html">Open Config/Preprocess</a>
+          </div>
+        </div>
+
+        <section class="grid two">
+          <div class="panel reveal">
+            <div class="section-title">Status Snapshot</div>
+            <p class="section-subtitle">Pick up exactly where you left off.</p>
+            <div class="progress-stack">
+              <div class="progress-row">
+                <span class="step completed">Step 0 - Properties</span>
+                <span class="step completed">Step 1 - Import</span>
+                <span class="step active">Step 2 - Column Mapping</span>
+                <span class="step locked">Step 3 - RowData</span>
+                <span class="step locked">Step 4 - Sample Metadata</span>
+              </div>
+              <div class="progress-row">
+                <span class="step locked">Filtering</span>
+                <span class="step locked">Normalization</span>
+                <span class="step locked">Impute/Scale</span>
+                <span class="step locked">Dim Reduction</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel reveal delay-1">
+            <div class="section-title">Dataset Properties</div>
+            <p class="section-subtitle">Configuration anchors that gate the workflow.</p>
+            <div class="grid two" style="gap: 12px;">
+              <div class="notice">Workspace Name: LFQ_Study_A</div>
+              <div class="notice">Modality: Bulk</div>
+              <div class="notice">Data Type: LFQ Proteomics</div>
+              <div class="notice">Samples: 48 - Features: 4,120</div>
+            </div>
+            <div class="notice warning" style="margin-top: 12px;">
+              Changing earlier steps will invalidate downstream configuration.
+            </div>
+          </div>
+        </section>
+
+        <section class="grid two" style="margin-top: 24px;">
+          <div class="panel reveal delay-2">
+            <div class="section-title">Progress Card</div>
+            <p class="section-subtitle">Configuration and preprocessing are tracked separately.</p>
+            <div class="notice">Config: Step 2 active - Preprocess: Locked</div>
+            <div style="margin-top: 16px;">
+              <a class="btn" href="workspace.html">Continue Configuration</a>
+            </div>
+          </div>
+          <div class="panel reveal delay-3">
+            <div class="section-title">Results Placeholder</div>
+            <p class="section-subtitle">Downstream analyses unlock after preprocessing.</p>
+            <div class="plot">Results dashboard arrives post-V1</div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>

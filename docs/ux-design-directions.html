@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OMNI_OMICS_HUB UX Design Directions</title>
+<style>
+:root {
+  --primary-900: #21271f;
+  --primary-800: #323b2f;
+  --primary-700: #424e3f;
+  --primary-600: #53624f;
+  --accent-500: #6e8b74;
+  --accent-400: #819b87;
+  --accent-300: #95ab9a;
+  --accent-200: #a9bbad;
+  --bg-app: #f7f8f6;
+  --bg-panel: #ffffff;
+  --border: #c0cabe;
+  --text-primary: #1f2721;
+  --text-muted: #5e7764;
+  --success: #6b8e6d;
+  --info: #7f9e81;
+  --warning: #adbaaa;
+  --error: #9a5a5a;
+  --radius: 14px;
+  --shadow: 0 8px 24px rgba(33,39,31,0.12);
+  --gap: 16px;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, sans-serif;
+  color: var(--text-primary);
+  background: var(--bg-app);
+}
+header {
+  padding: 32px 20px 16px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+header h1 { margin: 0 0 8px; font-size: 26px; }
+header p { margin: 0; color: var(--text-muted); }
+.grid {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  padding: 12px 20px 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.card {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+.card header {
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--border);
+  background: linear-gradient(135deg, #ffffff 0%, #f1f3f0 100%);
+}
+.card h2 { margin: 0 0 6px; font-size: 18px; }
+.card p { margin: 0; color: var(--text-muted); font-size: 13px; }
+.mock {
+  padding: 16px;
+  display: grid;
+  gap: 12px;
+  background: #fafbf9;
+}
+.bar { height: 10px; background: var(--border); border-radius: 999px; }
+.bar.accent { background: var(--accent-400); }
+.btn { padding: 8px 12px; background: var(--accent-500); color: #fff; border-radius: 10px; font-size: 12px; display: inline-block; }
+.tag { display: inline-block; padding: 4px 8px; border-radius: 999px; font-size: 11px; background: #eef2ee; color: var(--primary-700); }
+.panel {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 10px;
+  background: #fff;
+}
+.cols { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.stepper { display: flex; gap: 6px; align-items: center; }
+.step { width: 20px; height: 20px; border-radius: 50%; background: var(--accent-300); color: #fff; font-size: 11px; display: grid; place-items: center; }
+.step.off { background: var(--border); color: var(--text-muted); }
+.plot { height: 90px; background: repeating-linear-gradient(135deg, #e7ece7 0, #e7ece7 8px, #f2f5f2 8px, #f2f5f2 16px); border-radius: 10px; border: 1px dashed var(--border); }
+.table { display: grid; gap: 6px; }
+.row { height: 12px; background: #e5e9e4; border-radius: 6px; }
+.small { font-size: 11px; color: var(--text-muted); }
+footer {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 12px;
+  padding-bottom: 32px;
+}
+</style>
+</head>
+<body>
+<header>
+  <h1>OMNI_OMICS_HUB – UX Design Directions</h1>
+  <p>Six exploratory directions grounded in the stepwise workflow, panel/tab-centric UI, and plot-based feedback described in the brainstorm. Terminology note: OmicsWorkspace is canonical; OmicsAnalysis is a legacy synonym for the same object.</p>
+</header>
+
+<section class="grid">
+  <article class="card">
+    <header>
+      <h2>Direction A – Calm Stepper</h2>
+      <p>Guided wizard with persistent stepper and checkpoint clarity.</p>
+    </header>
+    <div class="mock">
+      <div class="stepper">
+        <div class="step">0</div><div class="step">1</div><div class="step">2</div><div class="step off">3</div><div class="step off">4</div>
+      </div>
+      <div class="panel">
+        <div class="bar accent"></div>
+        <div class="small">Dataset Properties</div>
+      </div>
+      <div class="cols">
+        <div class="plot"></div>
+        <div class="table">
+          <div class="row"></div><div class="row"></div><div class="row"></div>
+        </div>
+      </div>
+      <div class="btn">Continue</div>
+    </div>
+  </article>
+
+  <article class="card">
+    <header>
+      <h2>Direction B – Panel Dashboard</h2>
+      <p>Modular panels with consistent controls, OmicsPlayground-inspired.</p>
+    </header>
+    <div class="mock">
+      <div class="cols">
+        <div class="panel">
+          <div class="tag">Projects</div>
+          <div class="table"><div class="row"></div><div class="row"></div></div>
+        </div>
+        <div class="panel">
+          <div class="tag">Analysis</div>
+          <div class="plot"></div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="bar"></div>
+        <div class="small">Filters • Normalization • Imputation</div>
+      </div>
+      <div class="btn">Save Preprocessed Data</div>
+    </div>
+  </article>
+
+  <article class="card">
+    <header>
+      <h2>Direction C – Split Workspace</h2>
+      <p>Left configuration, right live preview + plots.</p>
+    </header>
+    <div class="mock">
+      <div class="cols">
+        <div class="panel">
+          <div class="small">Mapping & RowData</div>
+          <div class="table"><div class="row"></div><div class="row"></div><div class="row"></div></div>
+        </div>
+        <div class="panel">
+          <div class="plot"></div>
+          <div class="small">Missingness + Density</div>
+        </div>
+      </div>
+      <div class="btn">Apply Changes</div>
+    </div>
+  </article>
+
+  <article class="card">
+    <header>
+      <h2>Direction D – Timeline Flow</h2>
+      <p>Vertical timeline with checkpoints and provenance cues.</p>
+    </header>
+    <div class="mock">
+      <div class="panel">
+        <div class="small">Step 1 • Import</div>
+        <div class="plot"></div>
+      </div>
+      <div class="panel">
+        <div class="small">Step 2 • Mapping</div>
+        <div class="table"><div class="row"></div><div class="row"></div></div>
+      </div>
+      <div class="panel">
+        <div class="small">Checkpoint</div>
+        <div class="btn">Save Preprocessed Data</div>
+      </div>
+    </div>
+  </article>
+
+  <article class="card">
+    <header>
+      <h2>Direction E – Cards & Tabs</h2>
+      <p>Carded steps with tabbed panels for advanced options.</p>
+    </header>
+    <div class="mock">
+      <div class="panel">
+        <div class="tag">Step 3</div>
+        <div class="small">RowData & Feature Mapping</div>
+      </div>
+      <div class="cols">
+        <div class="panel"><div class="bar"></div><div class="small">Auto-detect IDs</div></div>
+        <div class="panel"><div class="bar"></div><div class="small">Advanced</div></div>
+      </div>
+      <div class="plot"></div>
+    </div>
+  </article>
+
+  <article class="card">
+    <header>
+      <h2>Direction F – Lab Console</h2>
+      <p>Technical, data-centric console with strong status feedback.</p>
+    </header>
+    <div class="mock">
+      <div class="panel">
+        <div class="small">Log Level • Status</div>
+        <div class="bar"></div>
+      </div>
+      <div class="cols">
+        <div class="panel"><div class="table"><div class="row"></div><div class="row"></div><div class="row"></div></div></div>
+        <div class="panel"><div class="plot"></div></div>
+      </div>
+      <div class="btn">Run Preprocessing</div>
+    </div>
+  </article>
+</section>
+
+<footer>
+  Review the directions and tell me which layout/interaction style fits best, or which elements to combine.
+</footer>
+</body>
+</html>

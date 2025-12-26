@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Project Dashboard - Prototype V2</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="page full">
+      <div class="topbar">
+        <div>
+          <div class="brand">Omni Omics Hub</div>
+          <div class="section-subtitle">Project Dashboard - Proteomics Pilot</div>
+        </div>
+        <div style="display: flex; gap: 12px;">
+          <a class="btn secondary" href="index.html">Home</a>
+          <button class="btn">Create Workspace</button>
+        </div>
+      </div>
+
+      <section class="grid two">
+        <div class="panel">
+          <div class="section-title">Project Summary</div>
+          <p class="section-subtitle">Local workspace with one active project.</p>
+          <div class="field">
+            <label>Title</label>
+            <div class="input">Proteomics Pilot</div>
+          </div>
+          <div class="field">
+            <label>Description</label>
+            <div class="input">Baseline LFQ preprocessing validation.</div>
+          </div>
+          <div class="notice">Analyses live in project subfolders with a manifest index.</div>
+        </div>
+
+        <div class="panel">
+          <div class="section-title">Actions</div>
+          <p class="section-subtitle">Manage lifecycle and exports.</p>
+          <div style="display: grid; gap: 12px;">
+            <button class="btn">Import Workspace</button>
+            <button class="btn secondary">Export Workspace Bundle</button>
+            <button class="btn ghost">Delete Project</button>
+          </div>
+          <div class="notice warning" style="margin-top: 16px;">Destructive actions require confirmation.</div>
+        </div>
+      </section>
+
+      <section class="panel" style="margin-top: 24px;">
+        <div class="section-title">OmicsAnalyses</div>
+        <p class="section-subtitle">Configuration and preprocessing are complete.</p>
+        <table class="table" style="width: 100%; border-collapse: collapse;">
+          <thead>
+            <tr>
+              <th style="text-align: left; padding-bottom: 8px; font-size: 12px; color: var(--text-muted);">Name</th>
+              <th style="text-align: left; padding-bottom: 8px; font-size: 12px; color: var(--text-muted);">Omics Layer</th>
+              <th style="text-align: left; padding-bottom: 8px; font-size: 12px; color: var(--text-muted);">Config Status</th>
+              <th style="text-align: left; padding-bottom: 8px; font-size: 12px; color: var(--text-muted);">Preprocess Status</th>
+              <th style="text-align: left; padding-bottom: 8px; font-size: 12px; color: var(--text-muted);">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="padding: 8px 0;">LFQ_Study_A</td>
+              <td style="padding: 8px 0;">Proteomics (LFQ)</td>
+              <td style="padding: 8px 0;"><span class="badge success">Completed</span></td>
+              <td style="padding: 8px 0;"><span class="badge success">Completed</span></td>
+              <td style="padding: 8px 0;"><a class="btn" href="omics-dashboard.html">Open</a></td>
+            </tr>
+            <tr>
+              <td style="padding: 8px 0;">LFQ_Study_B</td>
+              <td style="padding: 8px 0;">Proteomics (LFQ)</td>
+              <td style="padding: 8px 0;"><span class="badge success">Completed</span></td>
+              <td style="padding: 8px 0;"><span class="badge success">Completed</span></td>
+              <td style="padding: 8px 0;"><a class="btn secondary" href="omics-dashboard.html">Open</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </main>
+  </body>
+</html>

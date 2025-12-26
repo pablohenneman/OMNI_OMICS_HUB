@@ -2,78 +2,123 @@
 
 ## Problem Statement
 Omics analysis is hard to configure and easy to misstep. The project guides users through configuring and preprocessing omics data into a structured, analysis-ready form. The current focus is proteomics LFQ data. Downstream analysis configuration and visualization are acknowledged but not part of the current scope.
+Terminology note: OmicsWorkspace is the canonical top-level container; OmicsAnalysis is a legacy synonym for the same object. Use "analysis" only for downstream analysis modules.
 
-## Project & Analysis Management (OmicsProject)
+## Project & Workspace Management (OmicsProject)
 Source: `User_Notes/user_notes_correct_course_and_epics_bundle.md`
 - Home screen: app opens on HOME with short project description and a "Get Started" CTA that routes to Projects.
 - Home screen: add a log level dropdown (dev = all logs, user = only major step completions).
-- Projects are required before any analysis can be created or opened.
+- Projects are required before any workspace can be created or opened.
 - Project lifecycle: create/open/delete/unlink; local-only with explicit confirmation on destructive actions.
-- A project is a folder on disk with a manifest; it is the authoritative index of analyses.
-- Project output includes a manifest and analysis workspace folders.
+- A project is a folder on disk with a manifest; it is the authoritative index of workspaces.
+- Project output includes a manifest and workspace folders.
 - Example structure:
   - projectfolder/config.json (project settings in project object)
-  - projectfolder/<analysis-id>/ (one folder per omics analysis)
+  - projectfolder/<workspace-id>/ (one folder per omics workspace)
   - projectfolder/ExportedAnalyses/ (portable exports by name + date)
-- Single active project; analyses are independent and each analysis owns one dataset.
-- Analysis lifecycle: create/delete/import; portable imports are converted to workspace state and registered.
+- Single active project; workspaces are independent and each workspace owns one dataset.
+- Workspace lifecycle: create/delete/import; portable imports are converted to workspace state and registered.
 - App-level registry tracks recent projects; missing/moved projects handled gracefully.
 - Cache representation: an in-memory S4 OmicsProject object that centralizes paths and project metadata.
-- Navigation gating: no project open shows only Home/Projects; analysis panels unlock only after a project + analysis exist.
+- Navigation gating: no project open shows only Home/Projects; workspace panels unlock only after a project + workspace exist.
 - Baseline V1 goal for projects: manage workspace contents (datasets living in the project); extended features can be added later.
 - Logging/provenance:
   - log UI parameter changes, provenance saves, and process completion times (duration).
+  - OmicsProject owns multiple OmicsWorkspaces; each OmicsWorkspace owns exactly one OmicsDataset.
+  - Each step records parameters, start time, end time, and total duration.
+  - Logging levels: User (step outcomes, warnings, failures) and Dev (parameter diffs, sub-step timings, load/compute events).
+ 
+## Project vs Workspace Dashboards (Navigation)
+- Project dashboard is project-level only: overview table of OmicsWorkspaces (datasets) with key properties.
+- Project dashboard includes Create OmicsWorkspace and select existing workspace.
+- Selecting/creating an OmicsWorkspace opens the OmicsWorkspace dashboard (workspace-level).
+- OmicsWorkspace dashboard shows dataset info/stats + sub-analyses (future) and provides a CTA to open Import/Config/Preprocess at current step.
+- Left nav for Import/Config/Preprocess is only shown inside the import/config workspace, not on the project dashboard.
 
-## Omics Analysis Object
+## OmicsWorkspace Navigation (Left Nav)
+- OmicsWorkspace screens use a persistent left nav with top-level sections: Home, Data, Results.
+- Results is locked in V1.
+- Data expands into two grouped subsections:
+  - Configuration: Steps 0–4
+  - Preprocessing: Filtering, Normalization, Imputation/Scaling, Dimensionality Reduction
+- Each step shows a state (locked/ready/dirty/completed).
+- Navigation changes the visible workspace only; computation runs only via Apply/Run.
+
+## App Screen Hierarchy & OmicsWorkspace (V1)
+- Three primary screen levels: Landing Page, Project Dashboard, OmicsWorkspace Level.
+- OmicsWorkspace level centers on a single config/preprocessing workspace with a persistent two-row progress bar:
+  - Row 1: Configuration (Steps 0–4)
+  - Row 2: Preprocessing (Filtering -> DR)
+  - Each step shows state (completed/active/locked).
+- The progress module is persistent and reused in the OmicsWorkspace dashboard as a status card.
+- OmicsWorkspace Dashboard behavior:
+  - Newly created workspace: status/to-do card dominates.
+  - As config completes: add summary cards (workspace name, omics layer, bulk vs single-cell, sample count, feature count).
+  - Top half: global workspace properties + status; bottom half: Results placeholder (post-V1).
+- Clicking steps switches to the full workspace (replaces dashboard).
+- Shared workspace layout rules:
+  - Left panel: parameters/controls; advanced in collapsible section.
+  - Validation/warnings above action area.
+  - Bottom-left: explicit Apply/Continue buttons.
+  - Validation errors are user-fixable and block Apply/Continue; system errors are unexpected and logged with an error ID.
+  - Right panel: feedback (tables, plots, interactive builders).
+  - Some steps may temporarily use more horizontal space.
+- Navigation never triggers computation; execution requires explicit user action.
+Merged panels: Step 0 + Step 1 share a single panel; Step 2 + Step 3 share a single panel (may be split in the future). Continue advances step state, not panel layout.
+
+## OmicsWorkspace Object
 Sources:
 - `User_Notes/user_notes_correct_course_and_epics_bundle.md`
 - `User_Notes/omn_omics_backend_high_level_design_takeaways.md`
-- An omics analysis lives inside a project and is represented in cache as an S4 object.
-- The omics analysis object has three main slots: (can later expanded to more when extra features are added)
-  - Omics Data object (data slot, focus for V1 configuration and preprocessing)
-  - UI params (for opening an analysis later and having the same configuration, in user interface) (also included in V1)
+- An omics workspace lives inside a project and is represented in cache as an S4 object.
+- The omics workspace object has three main slots: (can later expanded to more when extra features are added)
+  - OmicsDataset (dataset slot, focus for V1 configuration and preprocessing)
+  - UI params (for opening a workspace later and having the same configuration, in user interface) (also included in V1)
   - Analysis Results object (results slot, planned but not implemented in V1)
-- The data slot concerns storage only; management of configuration, preprocessing, data state tracking, and gating is handled by the omics analysis object.
-- Raw data presence state is managed at the analysis object level.
-- Additional analysis-level slots can be added later to support these management concerns.
-- The analysis object is the primary in-memory object used by the UI while an analysis is open.
-- On disk, each analysis lives in its own project subfolder and stores:
-  - an `omicsanalysis.rda` file for the analysis object
+- The dataset slot contains the full dataset, metadata, and preprocessing state; workflow gating and UI params are handled by the omics workspace object.
+- Raw data presence state is tracked in the OmicsDataset and surfaced at the workspace level.
+- Additional workspace-level slots can be added later to support these management concerns.
+- The workspace object is the primary in-memory object used by the UI while a workspace is open.
+- On disk, each workspace lives in its own project subfolder and stores:
+  - an `omicsworkspace.rda` file for the workspace object
   - subfolders for files not kept in memory (raw data, exported figures, and later analysis outputs)
 - Raw data state is explicit and must never change silently (embedded, detached, missing).
-- Export is handled at the analysis level: exporting bundles the analysis object plus any on-disk data (raw data and other non-cached artifacts) by loading them into the data object for portability.
-- Exported analyses are saved in a project export folder with name + date; importing a shared `.rda` auto-configures a new analysis subfolder with required on-disk folders and data.
+- Export is handled at the workspace level: exporting bundles the workspace object plus any on-disk data (raw data and other non-cached artifacts) by loading them into the dataset for portability.
+- Workspace export is self-contained: data, configuration, preprocessing state, provenance, and any internal databases referenced by the workspace.
+- Import always creates a new workspace subfolder with required on-disk folders and data.
 - Export folder name: `ExportedAnalyses` (project-level).
 
-## Omics Data Object
+## OmicsDataset
 Sources:
 - `User_Notes/backend_preprocessing_design.md`
 - `User_Notes/preprocessing_guidelines.md`
 - `User_Notes/steps_01_to_03_import_and_rowdata_flow.md`
 - `User_Notes/step_04_sample_data_colData_configuration.md`
-- The Omics Data object stores data only (no workflow management).
+- In this project, OmicsDataset represents the complete dataset, including data, metadata, and preprocessing state.
+- The OmicsDataset stores assays, rowData, colData, dataset properties, and preprocessing/provenance details.
 
-- Raw Input data slot
-  - full input (raw data) non-configured (only used, during export of an analysis or in the first step of data parsing)
+- Raw input slot
+  - full input (raw data) non-configured (only used, during export of a workspace or in the first step of data parsing)
   - Preview df (first 10 rows of raw input df
-- Assays slot:
+- Assays:
   - raw: non-log transformed raw assay (post-filtering applied via masks)
   - normalized: derived from raw (log transform + optional normalization method)
   - imputed normalized: normalized assay after imputation
   - scaled: scaled version of the normalized/imputed assay
-- rowData slot:
+- rowData:
   - user-defined rowData
   - rowData_internal from feature mapping (same nrow)
   - row filtering applies to all rowData tables
   - later analysis feature annotations can be added as additional rowData tables
-- colData slot:
+- colData:
   - sample metadata configured in Step 4
-- colData_meta slot:
+- colData_meta:
   - metadata about colData columns (group ordering, colors, column-level settings)
-- properties slot:
+- properties:
   - list of property name/value pairs
   - properties come from user config and derived checks (e.g., data flags)
   - enforced property names list is configurable and can evolve over time
+  - preprocessing steps and parameters are stored as provenance entries
 
 
 
@@ -94,7 +139,7 @@ Source: `User_Notes/internal_feature_annotation_db_mvp.md`
 - Modular design: DB manager can host per-type subclasses, each exposing specialized methods (e.g., mapping IDs).
 - V1 database type: `feature_mapping`.
 - For `feature_mapping`, resolve by properties (omics_layer = proteomics or transcriptomics) and species to return mapping tables.
-- Omics analyses request DB access by type (e.g., `feature_mapping`) through the DB Manager.
+- Omics workspaces request DB access by type (e.g., `feature_mapping`) through the DB Manager.
 - Required functions from the feature mapping spec:
   - Score candidate ID columns (mapping coverage, multi-mapping rate, unmapped count).
   - Map ID vectors to canonical IDs with deterministic one-to-many handling.
@@ -122,16 +167,17 @@ Source: `User_Notes/internal_feature_annotation_db_mvp.md`
 
 
 # Data Import (configuration + preprocessing):
-- loading of omics analysis or creating a new omics analysis (starts by filling and configuring the Omics data object
+- loading of an omics workspace or creating a new omics workspace (starts by filling and configuring the OmicsDataset)
 - Linear flow: track configuration steps (step0, step1, step2, ..., complete). If a user changes an earlier step, re-run downstream steps (initially re-run everything downstream to the current point). Do the same for preprocessing.
+Steps 0–4 are canonical even when UI panels are merged; Continue advances step state, not panel layout.
 
 ## Data Configuration contract: 
-User uploads data and configures dataset properties, expression vs rowData columns, and sample metadata from sample names. At the end, an unfiltered configured Omics data object is returned (Configuration = "complete"): properties, rowData (user + internal), raw assay, colData (sample + col metadata).
-Other dataframes, such as the input dataframe, can be removed from cache but must be available on disk in the analysis raw folder for later re-configuration.
+User uploads data and configures dataset properties, expression vs rowData columns, and sample metadata from sample names. At the end, an unfiltered configured dataset is returned (Configuration = "complete"): properties, rowData (user + internal), raw assay, colData (sample + col metadata).
+Other dataframes, such as the input dataframe, can be removed from cache but must be available on disk in the workspace raw folder for later re-configuration.
 ### Tab 1: 
 Dataset Properties (step 0)
 Source: `User_Notes/step_00_dataset_properties_bmad.md`
-- Required properties (V1): analysis_name (unique within project), modality (bulk/single_cell), data_type (fixed to LFQ proteomics).
+- Required properties (V1): workspace_name (unique within project), modality (bulk/single_cell), data_type (fixed to LFQ proteomics).
 - Optional context: acquisition_mode, sample_origin, project_description.
 - No data upload here; this step only sets dataset context.
 - Explicit completion gating before import; downstream panels locked until completed.
@@ -148,6 +194,7 @@ Sources:
 - NA detection: first parse and check for NA/NULL/Inf (coerce to NA). If none found, scan for default NA tokens ("NA", "", "NULL") and re-parse.
 - Defaults: header = TRUE (shown as dropdown but locked in V1), delimiter auto-detect; advanced settings allow manual override and custom NA tokens.
 - Commit point on Continue: store parsed data, a stable preview snapshot, parse settings, and mark Step 1 completed (Property: Configuration = "step1").
+- Missingness reporting separates parsed NA vs token-normalized NA, and separates expression data vs rowData; mixed cases must be surfaced with no silent conversion.
 
 ### Tab 2: Column Mapping & RowData (Steps 2-3)
 Sources:
@@ -175,6 +222,8 @@ RowData configuration:
   - select primary ID column and delimiter (;, by default) for multi-ID entries (protein groups in proteomics are common)
   - a selected ID column may be subjected to a delim operation do str_split_i(delim, i = 1) (optional), but always undergoes:
   - Duplicate handling: append .1, .2, ... to internal IDs and warn with examples.
+  - First occurrence remains unsuffixed and may map; duplicates are suffixed and are not mapped.
+  - Internal DB duplicate IDs are resolved by deterministic first-match selection.
   - choose ID type (uniprot, ensembl, gene_symbol, protein_name)
   - species is used for DB mapping
   - mapping feedback shows coverage, multi-mapping rate, and unmapped count
@@ -250,27 +299,28 @@ Source: `User_Notes/step_04_sample_data_colData_configuration.md`
   - full configuration stored in provenance
 
 ## Preprocessing Contract (V1)
-Goal: preprocess a configured omics data object into a preprocessed data object by filtering rowData, colData, and the raw assay; adding normalized/imputed and scaled assays; storing an imputation mask; adding variable feature flags; computing PCA (default top 10 PCs) from scaled data using variable features; and computing UMAP coords from selected PCs.
+Goal: preprocess a configured dataset into a preprocessed dataset by filtering rowData, colData, and the raw assay; adding normalized/imputed and scaled assays; storing an imputation mask; adding variable feature flags; computing PCA (default top 10 PCs) from scaled data using variable features; and computing UMAP coords from selected PCs.
 
-The preprocessed data object is stored in the data slot of the Omics analysis object. The configured data object may be removed from memory but can be reconstructed from the raw input dataframe because steps are saved.
+The preprocessed dataset is stored in the dataset slot of the OmicsWorkspace object. The configured dataset may be removed from memory but can be reconstructed from the raw input dataframe because steps are saved.
 
 Sources:
 - `User_Notes/preprocessing_guidelines.md`
 - `User_Notes/backend_preprocessing_design.md`
 - `User_Notes/backend_async_and_state_management.md`
 
-- Configured Omics data object, is start point of this workflow
+- Configured dataset is the start point of this workflow
 - Linear, single-state pipeline with explicit Save checkpoint.
-- Async execution for heavy steps (post V1).
+- Apply commits a single step’s parameters and outputs; Save Preprocessed Data is a distinct freeze that unlocks downstream analyses.
+- V1 runs synchronously with minimal running indicators; async queues and background processing are post-V1 only.
 - Strict invalidation on data-touching changes. (when user wants to change parameters, that will require downstream re-running of params) especially, when data has been configured and preprocessed)
 - guide users through settings params for processing by providing plots
 - Keep track of current step in preprocessing workflow, Only allow going to next step when previous step is confirmed)
 ### Tab 1: Filtering of samples and features:
-- Input: configured data object (kept in cache to allow reconfiguring filters)
-- Purpose: define which samples and features are in the active dataset by filtering from the configured data object.
-- Outputs: filtered active data object in the Omics analysis data slot plus `sample_mask` and `feature_mask` stored as provenance masks.
+- Input: configured dataset (kept in cache to allow reconfiguring filters)
+- Purpose: define which samples and features are in the active dataset by filtering from the configured dataset.
+- Outputs: filtered active dataset in the OmicsWorkspace dataset slot plus `sample_mask` and `feature_mask` stored as provenance masks.
 - Backend:
-  - filtering does not change the configured data object in cache; it hard-filters assays, rowData, and colData in the active data object
+  - filtering does not change the configured dataset in cache; it hard-filters assays, rowData, and colData in the active dataset
   - defaults keep all samples/features (no filtering applied)
   - changing filters invalidates downstream preprocessing steps
   - short step; can run synchronously
@@ -300,12 +350,12 @@ Sources:
 Purpose:
 - Transform expression values into a normalized assay suitable for downstream analyses.
 Inputs:
-- Active omics data object in the Omics analysis data slot.
-- Raw assay (from the active data object) as the normalization input.
+- Active dataset in the OmicsWorkspace dataset slot.
+- Raw assay (from the active dataset) as the normalization input.
 Outputs:
-- Normalized assay written back into the active data object.
+- Normalized assay written back into the active dataset.
 Backend:
-- Unlike filtering, normalization does not rely on a preserved configured object; it updates the active data object directly.
+- Unlike filtering, normalization does not rely on a preserved configured dataset; it updates the active dataset directly.
 - Double-normalization is prevented because the raw assay is configured as non-log-transformed.
 - Method and parameters are explicitly recorded.
 - V1 method options:
@@ -321,7 +371,7 @@ UI:
 
 ### Tab 3: Imputation + data scaling (always done)
 - Imputation
-  - Input: active data object normalized assay.
+  - Input: active dataset normalized assay.
   - Uses imputation mask (default `is.na(raw)`) to reset imputed positions to NA before re-running.
   - Method and parameters are recorded.
   - V1 methods: zero-imputation (default) and DEP2 `MinProb` (q = 0.01 default). (other methods from DEP2 and seurat are added later)
@@ -366,9 +416,9 @@ UI:
 
 
 ## Glossary
-- Active data object: the data object that lives within the OmicsAnalysis object.
-- Configured data object: the data object after all configuration steps are completed.
-- Preprocessed data object: configured data object + preprocessing steps applied.
+- Active dataset: the dataset that lives within the OmicsWorkspace object.
+- Configured dataset: the dataset after all configuration steps are completed.
+- Preprocessed dataset: configured dataset + preprocessing steps applied.
 
 ## Section G: Backend Architecture Principles
 Source: `User_Notes/omn_omics_backend_high_level_design_takeaways.md`
@@ -394,6 +444,7 @@ Open questions: What should be documented from reference packages to aid the dev
 
 ## Revisions (Memory + Onboarding)
 - Data size: 2 GB is a current guideline, not a hard limit; expected to evolve.
+- Data limits are soft guardrails (warnings only) and do not block execution in V1.
 - Memory model: assume ~16 GB RAM is typical; keeping datasets in memory is acceptable for V1.
 - Resource awareness: track memory usage and warn at ~80% of total RAM utilization.
 - Onboarding: provide a written guide.

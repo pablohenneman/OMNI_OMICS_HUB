@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>OMNI OMICS HUB - Prototype V2</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="page full">
+      <div class="topbar">
+        <div class="brand">Omni Omics Hub</div>
+        <div class="field" style="max-width: 220px; margin: 0;">
+          <label for="log-level">Log Level</label>
+          <select id="log-level" class="input">
+            <option>Dev</option>
+            <option selected>User</option>
+          </select>
+        </div>
+      </div>
+
+      <section class="grid two">
+        <div class="panel">
+          <div class="kicker">Completed Dataset Browse</div>
+          <h1 style="margin: 8px 0 12px; font-size: 36px;">Welcome to OMNI OMICS HUB</h1>
+          <p class="section-subtitle">
+            Open a completed omics workspace and browse every configuration and preprocessing step without
+            running computation.
+          </p>
+          <div style="display: flex; gap: 12px;">
+            <a class="btn" href="project-dashboard.html">Get Started</a>
+            <a class="btn secondary" href="project-dashboard.html">Open Projects</a>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="section-title">Recent Projects</div>
+          <p class="section-subtitle">Local workspaces ready to resume.</p>
+          <table class="table" style="width: 100%; border-collapse: collapse;">
+            <thead>
+              <tr>
+                <th style="text-align: left; padding-bottom: 8px; font-size: 12px; color: var(--text-muted);">Project</th>
+                <th style="text-align: left; padding-bottom: 8px; font-size: 12px; color: var(--text-muted);">Location</th>
+                <th style="text-align: left; padding-bottom: 8px; font-size: 12px; color: var(--text-muted);">Last Opened</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="padding: 8px 0;">Proteomics Pilot</td>
+                <td style="padding: 8px 0;">C:\Omics\Pilot</td>
+                <td style="padding: 8px 0;">Today</td>
+              </tr>
+              <tr>
+                <td style="padding: 8px 0;">V1 Validation</td>
+                <td style="padding: 8px 0;">C:\Omics\V1</td>
+                <td style="padding: 8px 0;">Yesterday</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="grid two" style="margin-top: 24px;">
+        <div class="panel soft">
+          <div class="section-title">Create or Load Project</div>
+          <div class="field">
+            <label>Project Title</label>
+            <input class="input" placeholder="Omics V1 Validation" />
+          </div>
+          <div class="field">
+            <label>Workspace Folder</label>
+            <input class="input" placeholder="Choose a folder" />
+          </div>
+          <div style="display: flex; gap: 12px;">
+            <button class="btn">Create</button>
+            <button class="btn secondary">Load</button>
+            <button class="btn ghost">Unlink</button>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="section-title">What is New</div>
+          <div class="list">
+            <div class="item">Configuration and preprocessing steps show completed status.</div>
+            <div class="item">Column mapping conflicts stay visible until resolved.</div>
+            <div class="item">Sample metadata builder keeps unmatched samples in view.</div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

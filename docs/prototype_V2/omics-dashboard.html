@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>OmicsWorkspace Dashboard - Prototype V2</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app">
+      <nav class="nav">
+        <h2>OmicsWorkspace</h2>
+        <a class="active" href="omics-dashboard.html">Home</a>
+        <details open>
+          <summary>Data</summary>
+          <div class="submenu">
+            <a href="workspace.html?step=step0">Configuration <span class="badge success">Completed</span></a>
+            <a class="muted" href="workspace.html?step=step0">Step 0 - Properties</a>
+            <a class="muted" href="workspace.html?step=step1">Step 1 - Import</a>
+            <a class="muted" href="workspace.html?step=step2">Step 2 - Column Mapping</a>
+            <a class="muted" href="workspace.html?step=step3">Step 3 - RowData</a>
+            <a class="muted" href="workspace.html?step=step4">Step 4 - Sample Metadata</a>
+            <a href="workspace.html?step=filtering">Preprocessing <span class="badge success">Completed</span></a>
+            <a class="muted" href="workspace.html?step=filtering">Filtering</a>
+            <a class="muted" href="workspace.html?step=normalization">Normalization</a>
+            <a class="muted" href="workspace.html?step=impute">Impute/Scale</a>
+            <a class="muted" href="workspace.html?step=dimred">Dim Reduction</a>
+          </div>
+        </details>
+        <a href="#" class="muted">Results <span class="badge">Post-V1</span></a>
+      </nav>
+
+      <main class="page">
+        <div class="topbar">
+          <div>
+            <div class="brand">Proteomics Pilot</div>
+            <div class="section-subtitle">OmicsWorkspace - LFQ_Study_A</div>
+          </div>
+          <div style="display: flex; gap: 12px;">
+            <a class="btn secondary" href="project-dashboard.html">Back to Project</a>
+            <a class="btn" href="workspace.html?step=step0">Open Config/Preprocess Workspace</a>
+          </div>
+        </div>
+
+        <section class="panel">
+          <div class="section-title">Progress Status</div>
+          <div class="progress-stack">
+            <div class="progress-row">
+              <span class="step completed">Step 0 - Properties</span>
+              <span class="step completed">Step 1 - Import</span>
+              <span class="step completed">Step 2 - Column Mapping</span>
+              <span class="step completed">Step 3 - RowData</span>
+              <span class="step completed">Step 4 - Sample Metadata</span>
+            </div>
+            <div class="progress-row">
+              <span class="step completed">Filtering</span>
+              <span class="step completed">Normalization</span>
+              <span class="step completed">Impute/Scale</span>
+              <span class="step completed">Dim Reduction</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="grid two" style="margin-top: 24px;">
+          <div class="panel">
+            <div class="section-title">Workspace Summary</div>
+            <div class="list">
+              <div class="item">Workspace Name: LFQ_Study_A</div>
+              <div class="item">Modality: Bulk</div>
+              <div class="item">Data Type: LFQ Proteomics</div>
+              <div class="item">Samples: 48</div>
+              <div class="item">Features: 4,120</div>
+              <div class="item">Status: Configuration + Preprocessing Completed</div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="section-title">Results Placeholder</div>
+            <p class="section-subtitle">Post-V1 analysis panels appear here.</p>
+            <div class="plot">Results dashboard placeholder</div>
+          </div>
+        </section>
+      </main>
+    </div>
+    <script src="app.js"></script>
+  </body>
+</html>

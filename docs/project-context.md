@@ -5,16 +5,18 @@ This project is a re-do of an earlier OMNI_OMICS effort that started with enterp
 
 ## Core Goal
 Deliver a stable OMNI_OMICS V1 foundation that:
-- Creates project-based analyses centered around a single analysis object.
-- Focuses on import and setup for one preprocessed dataset per analysis object.
+- Creates project-based workspaces centered around a single workspace object.
+- Focuses on import and setup for one preprocessed dataset per workspace object.
 - Guides users through Steps 0-4 (dataset properties, import, mapping, rowData, colData).
 - Preserves provenance and establishes predictable downstream gating.
+- OmicsProject owns multiple OmicsWorkspaces; each OmicsWorkspace owns exactly one OmicsDataset.
 
 ## Scope Direction (V1)
-- Scope now emphasizes project-based analysis setup and import.
-- One analysis object per preprocessed dataset.
+- Scope now emphasizes project-based workspace setup and import.
+- One workspace object per preprocessed dataset.
 - Explicit commit points for every state-changing action.
 - Focused UI/UX with minimal but sufficient validation to proceed.
+In this project, OmicsDataset represents the complete dataset, including data, metadata, and preprocessing state.
 
 ## Key Contracts (from User_Notes)
 - Preprocessing contract and assays: `User_Notes/preprocessing_guidelines.md`
@@ -41,3 +43,9 @@ Start with project context and planning artifacts (brainstorm + product brief), 
 
 ## Output Location
 All BMad outputs are written to `docs/` or subfolders within `docs/`.
+
+## Navigation Clarification
+- Project dashboard is project-level only and lists OmicsWorkspaces (datasets) with key properties.
+- Creating or selecting an OmicsWorkspace opens the OmicsWorkspace dashboard (workspace-level).
+- OmicsWorkspace dashboard shows dataset info/stats and sub-analyses (future) and offers a CTA to open Import/Config/Preprocess at the current step.
+- Import/Config/Preprocess left-nav is only present inside the import/config workspace.

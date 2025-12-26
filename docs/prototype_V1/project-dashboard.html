@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Project Dashboard - OMNI OMICS HUB</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="page full">
+      <div class="topbar">
+        <div>
+          <div class="brand">Omni Omics Hub</div>
+          <div class="section-subtitle">Project Dashboard - Proteomics Pilot</div>
+        </div>
+        <div style="display: flex; gap: 12px;">
+          <a class="btn secondary" href="index.html">Home</a>
+          <button class="btn">Create Workspace</button>
+        </div>
+      </div>
+
+      <section class="grid two">
+        <div class="panel reveal">
+          <div class="section-title">Project Summary</div>
+          <p class="section-subtitle">Workspace manifest and workspace folders live here.</p>
+          <div class="field">
+            <label>Title</label>
+            <div class="input">Proteomics Pilot</div>
+          </div>
+          <div class="field">
+            <label>Description</label>
+            <div class="input">Baseline LFQ preprocessing validation.</div>
+          </div>
+          <div class="notice">Only one project is active at a time. Analyses are isolated per folder.</div>
+        </div>
+
+        <div class="panel reveal delay-1">
+          <div class="section-title">Actions</div>
+          <p class="section-subtitle">Manage project lifecycle and exports.</p>
+          <div style="display: grid; gap: 12px;">
+            <button class="btn">Import Workspace</button>
+            <button class="btn secondary">Export Workspace Bundle</button>
+            <button class="btn ghost">Delete Project</button>
+          </div>
+          <div class="notice warning" style="margin-top: 16px;">Destructive actions require confirmation.</div>
+        </div>
+      </section>
+
+      <section class="panel reveal delay-2" style="margin-top: 24px;">
+        <div class="section-title">OmicsAnalyses</div>
+        <p class="section-subtitle">Each workspace owns one dataset and workflow state.</p>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Omics Layer</th>
+              <th>Config Status</th>
+              <th>Preprocess Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>LFQ_Study_A</td>
+              <td>Proteomics (LFQ)</td>
+              <td><span class="badge active">Step 2</span></td>
+              <td><span class="badge locked">Locked</span></td>
+              <td><a class="btn" href="omics-dashboard.html">Open</a></td>
+            </tr>
+            <tr>
+              <td>LFQ_Study_B</td>
+              <td>Proteomics (LFQ)</td>
+              <td><span class="badge">Step 0</span></td>
+              <td><span class="badge locked">Locked</span></td>
+              <td><a class="btn secondary" href="omics-dashboard.html">Open</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </main>
+  </body>
+</html>

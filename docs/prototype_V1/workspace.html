@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Config & Preprocess Workspace - OMNI OMICS HUB</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app">
+      <nav class="nav">
+        <h2>OmicsWorkspace</h2>
+        <a href="omics-dashboard.html">Home</a>
+        <details open>
+          <summary>Data</summary>
+          <div class="submenu">
+            <span>Configuration <span class="badge active">Step 2</span></span>
+            <span class="muted">Step 0 - Properties</span>
+            <span class="muted">Step 1 - Import</span>
+            <span class="muted">Step 2 - Column Mapping</span>
+            <span class="muted">Step 3 - RowData</span>
+            <span class="muted">Step 4 - Sample Metadata</span>
+            <span>Preprocessing <span class="badge locked">Locked</span></span>
+            <span class="muted">Filtering</span>
+            <span class="muted">Normalization</span>
+            <span class="muted">Impute/Scale</span>
+            <span class="muted">Dim Reduction</span>
+          </div>
+        </details>
+        <a href="#" class="muted">Results <span class="badge locked">Post-V1</span></a>
+      </nav>
+
+      <main class="page">
+        <div class="topbar">
+          <div>
+            <div class="brand">Proteomics Pilot</div>
+            <div class="section-subtitle">LFQ_Study_A - Config / Preprocess</div>
+          </div>
+          <div style="display: flex; gap: 12px;">
+            <a class="btn secondary" href="omics-dashboard.html">Back to Dashboard</a>
+            <button class="btn">Apply / Continue</button>
+          </div>
+        </div>
+
+        <section class="panel reveal">
+          <div class="section-title">Progress</div>
+          <div class="progress-stack">
+            <div class="progress-row">
+              <span class="step completed">Step 0 - Properties</span>
+              <span class="step completed">Step 1 - Import</span>
+              <span class="step active">Step 2 - Column Mapping</span>
+              <span class="step locked">Step 3 - RowData</span>
+              <span class="step locked">Step 4 - Sample Metadata</span>
+            </div>
+            <div class="progress-row">
+              <span class="step locked">Filtering</span>
+              <span class="step locked">Normalization</span>
+              <span class="step locked">Impute/Scale</span>
+              <span class="step locked">Dim Reduction</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel reveal delay-1" style="margin-top: 20px;">
+          <div class="tabs">
+            <span class="tab">Step 0</span>
+            <span class="tab">Step 1</span>
+            <span class="tab active">Step 2</span>
+            <span class="tab">Step 3</span>
+            <span class="tab">Step 4</span>
+            <span class="tab">Filtering</span>
+            <span class="tab">Normalization</span>
+            <span class="tab">Impute/Scale</span>
+            <span class="tab">Dim Reduction</span>
+          </div>
+        </section>
+
+        <section class="workspace" style="margin-top: 24px;">
+          <div class="panel reveal delay-2">
+            <div class="section-title">Column Mapping - Step 2</div>
+            <p class="section-subtitle">Assign every column to Expression, RowData, or Ignore.</p>
+            <div class="notice">Conflicts (overlapping regex matches) must be resolved before Continue.</div>
+
+            <div class="field">
+              <label>Search Columns</label>
+              <input class="input" placeholder="Search across all columns" />
+            </div>
+
+            <div class="grid three" style="gap: 12px;">
+              <div class="panel soft">
+                <strong>RowData</strong>
+                <p class="section-subtitle">Feature IDs, annotations.</p>
+                <div class="notice">gene_symbol</div>
+                <div class="notice">protein_id</div>
+              </div>
+              <div class="panel soft">
+                <strong>Ignore</strong>
+                <p class="section-subtitle">Hold for review.</p>
+                <div class="notice">confidence_score</div>
+                <div class="notice">extra_notes</div>
+              </div>
+              <div class="panel soft">
+                <strong>Expression</strong>
+                <p class="section-subtitle">Quantitative intensities.</p>
+                <div class="notice">sample_A</div>
+                <div class="notice">sample_B</div>
+                <div class="notice">sample_C</div>
+              </div>
+            </div>
+
+            <details style="margin-top: 16px;">
+              <summary class="section-title" style="font-size: 16px;">Advanced Options</summary>
+              <div class="field">
+                <label>Regex Include Pattern</label>
+                <input class="input" placeholder="IncludeColumnsThatContain(...)" />
+              </div>
+              <div class="field">
+                <label>Numeric Validation</label>
+                <div class="notice">Non-numeric expression columns are blocked with warnings.</div>
+              </div>
+            </details>
+          </div>
+
+          <div class="panel reveal delay-3">
+            <div class="split-card">
+              <div>
+                <div class="section-title">Live Preview</div>
+                <p class="section-subtitle">Head of the parsed table updates on every change.</p>
+                <div class="plot">Preview Table (scrollable)</div>
+              </div>
+              <div>
+                <div class="section-title">Mapping Feedback</div>
+                <p class="section-subtitle">Coverage, multi-mapping, and unmapped counts.</p>
+                <div class="plot">Mapping Summary Panel</div>
+              </div>
+              <div>
+                <div class="section-title">Validation Messages</div>
+                <div class="notice warning">3 expression columns are non-numeric. Fix before Continue.</div>
+                <div class="notice">Step 3 will unlock after mapping conflicts are resolved.</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel reveal delay-4" style="margin-top: 24px;">
+          <div class="section-title">Sample Metadata Builder - Step 4</div>
+          <p class="section-subtitle">Derive sample traits and replicate labels from sample names.</p>
+          <div class="grid two">
+            <div>
+              <div class="field">
+                <label>Delimiter</label>
+                <input class="input" value="_" />
+              </div>
+              <div class="field">
+                <label>Label Column</label>
+                <input class="input" value="sample_label" />
+              </div>
+              <div class="field">
+                <label>Replicate Column</label>
+                <input class="input" value="replicate" />
+              </div>
+              <div class="notice">Unassigned samples stay visible until resolved.</div>
+            </div>
+            <div>
+              <div class="plot">Live Sample Table</div>
+              <div style="display: flex; gap: 8px; margin-top: 12px;">
+                <span class="badge">#unmapped 5</span>
+                <span class="badge success">#matched 43</span>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>

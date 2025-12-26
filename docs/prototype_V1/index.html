@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>OMNI OMICS HUB - Prototype</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="page full">
+      <div class="topbar">
+        <div class="brand">Omni Omics Hub</div>
+        <div class="field" style="max-width: 220px; margin: 0;">
+          <label for="log-level">Log Level</label>
+          <select id="log-level" class="input">
+            <option>Dev</option>
+            <option selected>User</option>
+          </select>
+        </div>
+      </div>
+
+      <section class="grid two">
+        <div class="panel reveal">
+          <div class="hero">
+            <span class="kicker">V1 Guided Setup</span>
+            <h1>Welcome to OMNI OMICS HUB</h1>
+            <p>
+              Configure and preprocess proteomics LFQ data through a clear, gated path. Every step is
+              traceable, resumable, and designed to keep you in control.
+            </p>
+            <div>
+              <a class="btn" href="project-dashboard.html">Get Started ?</a>
+              <a class="btn secondary" href="project-dashboard.html" style="margin-left: 12px;">View Projects</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel reveal delay-1">
+          <div class="section-title">Recent Projects</div>
+          <p class="section-subtitle">Local workspaces you can reopen instantly.</p>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Project</th>
+                <th>Location</th>
+                <th>Last Opened</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Proteomics Pilot</td>
+                <td>C:\Omics\Pilot</td>
+                <td>Yesterday</td>
+              </tr>
+              <tr>
+                <td>V1 Validation</td>
+                <td>C:\Omics\V1</td>
+                <td>2 days ago</td>
+              </tr>
+              <tr>
+                <td>Core Facility Batch</td>
+                <td>C:\Omics\CoreFacility</td>
+                <td>Last week</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="grid two" style="margin-top: 24px;">
+        <div class="panel soft reveal delay-2">
+          <div class="section-title">What's New</div>
+          <p class="section-subtitle">Updates for the current V1 workflow.</p>
+          <div class="card-list">
+            <div class="notice">Config steps now show locked/ready/completed states across the full workflow.</div>
+            <div class="notice">Column mapping adds conflict warnings when regexes overlap.</div>
+            <div class="notice">Sample metadata builder surfaces unassigned samples in real time.</div>
+          </div>
+        </div>
+
+        <div class="panel reveal delay-3">
+          <div class="section-title">Create a New Project</div>
+          <p class="section-subtitle">Projects are required before analyses can be created.</p>
+          <div class="field">
+            <label for="project-name">Project Title</label>
+            <input id="project-name" class="input" placeholder="e.g., Omics V1 Validation" />
+          </div>
+          <div class="field">
+            <label for="project-path">Workspace Folder</label>
+            <input id="project-path" class="input" placeholder="Choose a folder" />
+          </div>
+          <div style="display: flex; gap: 12px;">
+            <button class="btn">Create Project</button>
+            <button class="btn ghost">Unlink Project</button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
