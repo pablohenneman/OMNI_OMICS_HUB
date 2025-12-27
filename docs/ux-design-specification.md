@@ -317,6 +317,12 @@ Use bslib + standard patterns for layout and navigation:
 
 These encode omics semantics, state gating, provenance, and async behavior (post-V1):
 
+**Workspace Navigation (Persistent Left Nav)**
+Always visible within a workspace and derives from authoritative workspace state; enforces gating and indicates locked/active/completed.
+
+**Workspace Step/Progress Indicator (Stepper)**
+Reusable component for configuration + preprocessing status; visible even before configuration is complete and collapsible on the workspace dashboard once complete.
+
 **Stepper Tabs (Steps 0-4 + Preprocessing)**
 Purpose: guided, gated progression
 States: inactive / ready / dirty / running / completed
@@ -406,7 +412,9 @@ Error taxonomy: Validation errors are user-fixable and block Apply/Continue; Sys
 ### Navigation Patterns
 
 - Left navigation is module-level only.
+- Workspace left navigation is persistent across workspace views (dashboard, configuration, preprocessing, results) and reflects locked/active/completed state with gating.
 - Stepper navigation is exclusive to intake + preprocessing workflows.
+- Selecting Configuration/Preprocessing routes to the active step if incomplete, or the latest completed step if finished.
 - Tabs group closely related topics within a module.
 - Workflow order is system-enforced; users cannot reorder steps.
 - Disabled/locked nav elements explain why they're unavailable.

@@ -1,51 +1,88 @@
-# Project Context: OMNI_OMICS_HUB
+﻿---
+project_name: 'OMNI_OMICS_HUB'
+user_name: 'Pablo'
+date: '2025-12-27'
+sections_completed: ['technology_stack', 'language_rules', 'framework_rules', 'testing_rules', 'quality_rules', 'workflow_rules', 'anti_patterns']
+existing_patterns_found: 0
+---
+status: 'complete'
+rule_count: 37
+optimized_for_llm: true
 
-## Description
-This project is a re-do of an earlier OMNI_OMICS effort that started with enterprise-track implementation. The scope is now intentionally smaller to focus on a clear, V1 MVP: an OMICs data import and preprocessing platform with explicit checkpoints, reproducibility, and predictable downstream gating.
 
-## Core Goal
-Deliver a stable OMNI_OMICS V1 foundation that:
-- Creates project-based workspaces centered around a single workspace object.
-- Focuses on import and setup for one preprocessed dataset per workspace object.
-- Guides users through Steps 0-4 (dataset properties, import, mapping, rowData, colData).
-- Preserves provenance and establishes predictable downstream gating.
-- OmicsProject owns multiple OmicsWorkspaces; each OmicsWorkspace owns exactly one OmicsDataset.
+# Project Context for AI Agents
 
-## Scope Direction (V1)
-- Scope now emphasizes project-based workspace setup and import.
-- One workspace object per preprocessed dataset.
-- Explicit commit points for every state-changing action.
-- Focused UI/UX with minimal but sufficient validation to proceed.
-In this project, OmicsDataset represents the complete dataset, including data, metadata, and preprocessing state.
+_This file contains critical rules and patterns that AI agents must follow when implementing code in this project. Focus on unobvious details that agents might otherwise miss._
 
-## Key Contracts (from User_Notes)
-- Preprocessing contract and assays: `User_Notes/preprocessing_guidelines.md`
-- Backend preprocessing state model, invalidation, and save semantics:
-  - `User_Notes/backend_preprocessing_design.md`
-  - `User_Notes/backend_async_and_state_management.md`
-- Import, mapping, rowData, and colData flows:
-  - `User_Notes/steps_01_to_03_import_and_rowdata_flow.md`
-  - `User_Notes/step_04_sample_data_colData_configuration.md`
-  - `User_Notes/step_00_dataset_properties_bmad.md`
-- Internal annotation DB requirements:
-  - `User_Notes/internal_feature_annotation_db_mvp.md`
-- Correct-course EPIC sequencing and guardrails:
-  - `User_Notes/user_notes_correct_course_and_epics_bundle.md`
-- Tech stack direction and constraints:
-  - `User_Notes/tech_stack_brainstorm_v_1.md`
-- Analysis configuration overview:
-  - `User_Notes/Main Analysis configuration style prompt.txt`
-- High-level backend architecture principles:
-  - `User_Notes/omn_omics_backend_high_level_design_takeaways.md`
+---
 
-## Current Focus
-Start with project context and planning artifacts (brainstorm + product brief), then proceed through the BMad Method workflow in a greenfield track, keeping the scope aligned to the V1 MVP contracts above.
+## Technology Stack & Versions
 
-## Output Location
-All BMad outputs are written to `docs/` or subfolders within `docs/`.
+- Runtime: R + Shiny (golem scaffolding); UI theming via bslib + bsicons.
+- Tables: reactable default; DT only for heavy interaction/editing (e.g., Sample Metadata Builder).
+- Visualization: ggplot2; ComplexHeatmap + InteractiveComplexHeatmap; optional plotly.
+- Preprocessing adapters: Seurat-inspired workflows; DEP2/ vsn as needed.
+- Async: future + promises (use only when explicitly required).
+- Testing: testthat (mandatory headless tests); shinytest2 (small set of gated e2e flows).
+- Dependency management: renv is authoritative; versions listed in architecture are informational only.
+- DEP2: expected GitHub/Bioc-devel–adjacent source; confirm and pin via renv before final lock.
+## Critical Implementation Rules
 
-## Navigation Clarification
-- Project dashboard is project-level only and lists OmicsWorkspaces (datasets) with key properties.
-- Creating or selecting an OmicsWorkspace opens the OmicsWorkspace dashboard (workspace-level).
-- OmicsWorkspace dashboard shows dataset info/stats and sub-analyses (future) and offers a CTA to open Import/Config/Preprocess at the current step.
-- Import/Config/Preprocess left-nav is only present inside the import/config workspace.
+### Language-Specific Rules
+
+- Use `snake_case` for functions/variables; S4 classes stay `OmicsProject`, `OmicsWorkspace`, `OmicsDataset`.
+- All file paths must go through the path resolver in `R/persistence/`; no hard-coded or CWD-relative paths.
+- State changes must occur only via explicit Apply/Run/Save actions; UI is never authoritative.
+- Commit boundary: mark step completion only after state + provenance are durably written.
+- Preprocessing may mutate only the active dataset; configured dataset is never modified (reconstruct as needed).
+
+### Framework-Specific Rules
+
+- Use golem module structure; UI logic stays in `R/modules/` only.
+- Modules must not perform file IO; persistence lives in `R/persistence/`.
+- Workspace nav and stepper are reusable modules driven by workspace state; they never override state.
+- Resume behavior: Configuration/Preprocessing routes to active step if incomplete, latest completed if finished.
+
+### Testing Rules
+
+- testthat is mandatory for headless domain logic (state transitions, preprocessing, mapping, persistence).
+- shinytest2 is limited to a small number of deterministic end-to-end flows; may be gated/skipped for runtime.
+- Prefer deterministic “golden” datasets for any integration/UI tests.
+
+### Code Quality & Style Rules
+
+- Keep domain/state/persistence/provenance boundaries explicit; avoid cross-layer shortcuts.
+- Logging is a utility (`R/utils/logging.R`) and must not be used for replay or state reconstruction.
+- Provenance is authoritative and immutable once committed; one entry per state-changing action.
+
+### Development Workflow Rules
+
+- renv.lock updates are explicit and only on request/approval, not as side effects of experimentation.
+- Use project/workspace manifests and path resolver for all persistence; no ad-hoc paths.
+
+### Critical Don't-Miss Rules
+
+- No implicit recomputation or background execution in V1.
+- No silent mutations of workflow state or dataset state.
+- Step completion only after persistence + provenance commit succeeds.
+- Use step/substep IDs `{phase}.{step_order}.{short_name}` consistently in provenance/logging.
+---
+
+## Usage Guidelines
+
+**For AI Agents:**
+
+- Read this file before implementing any code
+- Follow ALL rules exactly as documented
+- When in doubt, prefer the more restrictive option
+- Update this file if new patterns emerge
+
+**For Humans:**
+
+- Keep this file lean and focused on agent needs
+- Update when technology stack changes
+- Review quarterly for outdated rules
+- Remove rules that become obvious over time
+
+Last Updated: 2025-12-27
+

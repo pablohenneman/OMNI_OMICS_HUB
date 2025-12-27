@@ -1,4 +1,4 @@
-# Workflow Status Template
+﻿# Workflow Status Template
 
 # This tracks progress through BMM methodology Analysis, Planning, and Solutioning phases.
 # Implementation phase is tracked separately in sprint-status.yaml
@@ -75,7 +75,8 @@ workflow_status: |
         command: "create-architecture"
         output: "System architecture document"
         note: "Complete system design for greenfield projects"
-        status: "pending"
+        status: "docs/architecture.md"
+        completed: "2025-12-27T16:01:43"
       - id: "create-epics-and-stories"
         required: true
         agent: "pm"
@@ -114,5 +115,6 @@ workflow_status: |
 brainstorm_requested: "true"
 research_requested: "false"
 product_brief_requested: "true"
+
 
 
