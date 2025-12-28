@@ -288,6 +288,8 @@ So that contributors can build and run the app consistently.
 **And** the setup instructions cover R, renv, and required system libraries
 **And** setup failures provide actionable guidance
 
+**Note:** Once this story (or Story 1.7) establishes a standard install/testing workflow, revert default testing guidance from `testthat::test_local()` back to installed-package strategies (e.g., `testthat::test_file()` or `R CMD check`).
+
 <!-- End story repeat -->
 
 ### Story 1.7: Initialize CI Pipeline for Core Checks

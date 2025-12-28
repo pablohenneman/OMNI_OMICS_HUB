@@ -18,3 +18,13 @@ RoxygenNote: 7.1.1
 Suggests: 
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
+Collate:
+    'app_config.R'
+    'app_server.R'
+    'app_ui.R'
+    'run_app.R'
+    'persistence/path_resolver.R'
+    'persistence/project_manifest.R'
+    'domain/omics_project.R'
+    'state/app_session_state.R'
+    'services/project_service.R'
