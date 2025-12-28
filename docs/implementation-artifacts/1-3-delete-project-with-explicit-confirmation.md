@@ -1,6 +1,6 @@
 # Story 1.3: Delete Project with Explicit Confirmation
 
-Status: ready-for-dev
+Status: review
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -19,25 +19,25 @@ so that I avoid accidental data loss.
 
 ## Tasks / Subtasks
 
-- [ ] Task 1: Define delete confirmation UX and copy (AC: 1, 2)
-  - [ ] Subtask 1.1: Add a delete action on the project dashboard with a confirmation modal.
-  - [ ] Subtask 1.2: Require explicit confirmation (e.g., checkbox + confirm button) that states all workspaces and data will be deleted.
-  - [ ] Subtask 1.3: Confirmation copy must include: project name, deletion is irreversible, all workspaces/data removed, and the exact path.
-- [ ] Task 2: Implement project deletion service and persistence (AC: 1, 3, 4)
-  - [ ] Subtask 2.1: Resolve project path via the path resolver and validate manifest presence before deletion.
-  - [ ] Subtask 2.2: Delete the project folder recursively; surface actionable errors on failure with no partial registry updates.
-  - [ ] Subtask 2.3: If the deleted project is active, clear the active project reference in session state.
-  - [ ] Subtask 2.4: Handle edge cases (locked files, permission errors, missing folders, open handles) with explicit error messages and no state change.
-- [ ] Task 3: Update project listings/registry (AC: 3, 4)
-  - [ ] Subtask 3.1: Remove the project from recent projects or registry listings after successful deletion.
-  - [ ] Subtask 3.2: Refresh UI state to remove the project and show a success message.
-  - [ ] Subtask 3.3: Ensure recent-projects removal and active-project clearing happen only after deletion succeeds.
-- [ ] Task 4: Tests (AC: 1, 2, 3, 4)
-  - [ ] Subtask 4.1: testthat coverage for explicit confirmation gating before deletion.
-  - [ ] Subtask 4.2: testthat coverage for successful deletion removing the project folder and listings.
-  - [ ] Subtask 4.3: testthat coverage for failure paths leaving the project intact with actionable errors.
-  - [ ] Subtask 4.4: testthat coverage for deleting an active project clearing active session state.
-  - [ ] Subtask 4.5: testthat coverage for recent-projects list not mutating on failed deletion.
+- [x] Task 1: Define delete confirmation UX and copy (AC: 1, 2)
+  - [x] Subtask 1.1: Add a delete action on the project dashboard with a confirmation modal.
+  - [x] Subtask 1.2: Require explicit confirmation (e.g., checkbox + confirm button) that states all workspaces and data will be deleted.
+  - [x] Subtask 1.3: Confirmation copy must include: project name, deletion is irreversible, all workspaces/data removed, and the exact path.
+- [x] Task 2: Implement project deletion service and persistence (AC: 1, 3, 4)
+  - [x] Subtask 2.1: Resolve project path via the path resolver and validate manifest presence before deletion.
+  - [x] Subtask 2.2: Delete the project folder recursively; surface actionable errors on failure with no partial registry updates.
+  - [x] Subtask 2.3: If the deleted project is active, clear the active project reference in session state.
+  - [x] Subtask 2.4: Handle edge cases (locked files, permission errors, missing folders, open handles) with explicit error messages and no state change.
+- [x] Task 3: Update project listings/registry (AC: 3, 4)
+  - [x] Subtask 3.1: Remove the project from recent projects or registry listings after successful deletion.
+  - [x] Subtask 3.2: Refresh UI state to remove the project and show a success message.
+  - [x] Subtask 3.3: Ensure recent-projects removal and active-project clearing happen only after deletion succeeds.
+- [x] Task 4: Tests (AC: 1, 2, 3, 4)
+  - [x] Subtask 4.1: testthat coverage for explicit confirmation gating before deletion.
+  - [x] Subtask 4.2: testthat coverage for successful deletion removing the project folder and listings.
+  - [x] Subtask 4.3: testthat coverage for failure paths leaving the project intact with actionable errors.
+  - [x] Subtask 4.4: testthat coverage for deleting an active project clearing active session state.
+  - [x] Subtask 4.5: testthat coverage for recent-projects list not mutating on failed deletion.
 
 ## Dev Notes
 
@@ -109,5 +109,18 @@ Codex (GPT-5)
 ### Debug Log References
 
 ### Completion Notes List
+- 2025-12-28: Implemented delete project service with manifest validation, safe deletion, recent-projects cleanup, and active-project clearing. Added project dashboard delete confirmation modal copy and explicit confirmation gating. Tests: `tests/testthat/test_project_service_delete.R`, `tests/testthat/test_project_dashboard_delete.R`, `tests/testthat/test_scaffold_structure.R`. Ran `Rscript -e "testthat::test_dir('tests/testthat')"` (skips: package not installed).
 
 ### File List
+- DESCRIPTION
+- R/mod_project_dashboard_server.R
+- R/mod_project_dashboard_ui.R
+- R/services_project_service.R
+- R/state_app_session_state.R
+- docs/architecture.md
+- docs/implementation-artifacts/1-3-delete-project-with-explicit-confirmation.md
+- docs/implementation-artifacts/sprint-status.yaml
+- docs/project-context.md
+- tests/testthat/test_project_dashboard_delete.R
+- tests/testthat/test_project_service_delete.R
+- tests/testthat/test_scaffold_structure.R

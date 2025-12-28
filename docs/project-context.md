@@ -38,7 +38,7 @@ _This file contains critical rules and patterns that AI agents must follow when 
 
 ### Framework-Specific Rules
 
-- Use golem module structure; UI logic stays in `R/modules/` only.
+- Use golem module structure; UI module code lives in root `R/` as `mod_*` files. Optional `R/modules/` is assets-only.
 - Modules must not perform file IO; persistence lives in `R/persistence/`.
 - Workspace nav and stepper are reusable modules driven by workspace state; they never override state.
 - Resume behavior: Configuration/Preprocessing routes to active step if incomplete, latest completed if finished.

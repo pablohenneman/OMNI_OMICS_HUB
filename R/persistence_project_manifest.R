@@ -89,6 +89,7 @@ write_project_manifest <- function(project_root, manifest) {
 
   manifest_path <- project_manifest_path(project_root)
   temp_path <- project_manifest_temp_path(project_root)
+  backup_path <- paste0(manifest_path, ".bak")
 
   on.exit({
     if (file.exists(temp_path)) {
@@ -98,8 +99,24 @@ write_project_manifest <- function(project_root, manifest) {
 
   saveRDS(manifest, temp_path)
 
+  if (file.exists(manifest_path)) {
+    if (file.exists(backup_path)) {
+      unlink(backup_path)
+    }
+    if (!file.rename(manifest_path, backup_path)) {
+      stop("Failed to prepare existing project manifest for replace.", call. = FALSE)
+    }
+  }
+
   if (!file.rename(temp_path, manifest_path)) {
+    if (file.exists(backup_path)) {
+      file.rename(backup_path, manifest_path)
+    }
     stop("Failed to write project manifest atomically.", call. = FALSE)
+  }
+
+  if (file.exists(backup_path)) {
+    unlink(backup_path)
   }
 
   manifest_path

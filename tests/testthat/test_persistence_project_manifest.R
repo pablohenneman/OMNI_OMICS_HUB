@@ -49,6 +49,11 @@ testthat::test_that("project manifest read/write uses validation and atomic repl
 
   project_root <- file.path(tempdir(), "project-manifest-read-write")
   dir.create(project_root, recursive = TRUE, showWarnings = FALSE)
+  on.exit({
+    if (dir.exists(project_root)) {
+      unlink(project_root, recursive = TRUE, force = TRUE)
+    }
+  }, add = TRUE)
 
   manifest <- new_project_manifest(
     project_name = "Read Write Project",
@@ -66,6 +71,13 @@ testthat::test_that("project manifest read/write uses validation and atomic repl
   testthat::expect_identical(loaded_manifest$project_id, manifest$project_id)
   testthat::expect_identical(loaded_manifest$schema_version, manifest$schema_version)
   testthat::expect_true(inherits(loaded_manifest$created_at, "POSIXct"))
+
+  updated_manifest <- manifest
+  updated_manifest$project_name <- "Read Write Project Updated"
+  updated_manifest_path <- write_project_manifest(project_root, updated_manifest)
+  testthat::expect_identical(updated_manifest_path, manifest_path)
+  updated_loaded <- read_project_manifest(project_root)
+  testthat::expect_identical(updated_loaded$project_name, updated_manifest$project_name)
 
   invalid_manifest_path <- project_manifest_path(project_root)
   saveRDS(list(schema_version = manifest$schema_version), invalid_manifest_path)
@@ -93,4 +105,20 @@ testthat::test_that("path resolver derives project root and manifest paths", {
   dir.create(project_root, recursive = TRUE, showWarnings = FALSE)
   temp_path <- project_manifest_temp_path(project_root)
   testthat::expect_identical(dirname(temp_path), project_root)
+
+  testthat::expect_error(
+    resolve_project_root(base_dir, "../escape"),
+    "Project name must not contain path separators",
+    fixed = TRUE
+  )
+  testthat::expect_error(
+    resolve_project_root(base_dir, "nested/path"),
+    "Project name must not contain path separators",
+    fixed = TRUE
+  )
+  testthat::expect_error(
+    resolve_project_root(base_dir, "nested\\path"),
+    "Project name must not contain path separators",
+    fixed = TRUE
+  )
 })

@@ -7,6 +7,10 @@ resolve_project_root <- function(project_location, project_name) {
     stop("Project name must be a non-empty string.", call. = FALSE)
   }
 
+  if (grepl("[/\\\\]", project_name) || grepl("\\.\\.", project_name)) {
+    stop("Project name must not contain path separators or '..'.", call. = FALSE)
+  }
+
   normalizePath(file.path(project_location, project_name), winslash = "/", mustWork = FALSE)
 }
 

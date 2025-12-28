@@ -8,7 +8,15 @@ testthat::test_that("create_project creates project folder, manifest, and active
   reset_active_project()
 
   base_dir <- file.path(tempdir(), "create-project")
+  if (dir.exists(base_dir)) {
+    unlink(base_dir, recursive = TRUE, force = TRUE)
+  }
   dir.create(base_dir, recursive = TRUE, showWarnings = FALSE)
+  on.exit({
+    if (dir.exists(base_dir)) {
+      unlink(base_dir, recursive = TRUE, force = TRUE)
+    }
+  }, add = TRUE)
 
   project <- create_project("My Project", base_dir)
   testthat::expect_s4_class(project, "OmicsProject")
@@ -32,7 +40,15 @@ testthat::test_that("create_project errors without leaving a partial manifest", 
   project_manifest_path <- OmniOmicsHub:::project_manifest_path
 
   base_dir <- file.path(tempdir(), "create-project-existing")
+  if (dir.exists(base_dir)) {
+    unlink(base_dir, recursive = TRUE, force = TRUE)
+  }
   dir.create(base_dir, recursive = TRUE, showWarnings = FALSE)
+  on.exit({
+    if (dir.exists(base_dir)) {
+      unlink(base_dir, recursive = TRUE, force = TRUE)
+    }
+  }, add = TRUE)
   project_root <- file.path(base_dir, "Existing Project")
   dir.create(project_root, recursive = TRUE, showWarnings = FALSE)
 

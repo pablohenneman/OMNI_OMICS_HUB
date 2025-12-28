@@ -1,4 +1,4 @@
-﻿---
+---
 stepsCompleted: [1, 2, 3, 4, 5, 6, 7, 8]
 inputDocuments:
   - docs/prd.md
@@ -133,14 +133,14 @@ Note: `renv::init()` may be deferred until initial dependency selection is confi
 - reactable as default tables; DT as a targeted escape hatch for high-interaction editing (e.g., Sample Metadata Builder).
 
 **Preprocessing Adapters (Seurat-inspired):**
-- Where Seurat behaviors are adopted (variable features, PCA/UMAP), prefer a thin adapter layer that maps OmicsDataset → Seurat-like inputs/outputs.
+- Where Seurat behaviors are adopted (variable features, PCA/UMAP), prefer a thin adapter layer that maps OmicsDataset ? Seurat-like inputs/outputs.
 - If direct reuse is impractical, selectively reimplement required logic with clear provenance and deterministic behavior.
 
 **Dependency Sourcing Notes:**
 - Verified versions (informational only; authoritative pinning is via `renv.lock`, not this document).
 - CRAN: shiny 1.12.1, golem 0.5.1, bslib 0.9.0, bsicons 0.1.2, htmltools 0.5.9, reactable 0.4.5, DT 0.34.0, shinyWidgets 0.9.0, waiter 0.2.5.1, shinycssloaders 1.1.0, ggplot2 4.0.1, plotly 4.11.0, Seurat 5.4.0, future 1.68.0, promises 1.5.0, testthat 3.3.1, shinytest2 0.4.1, renv 1.1.5
 - Bioconductor (release 3.22): ComplexHeatmap 2.26.0, InteractiveComplexHeatmap 1.18.0, vsn 3.78.0
-- DEP2: expected to be sourced from GitHub (Bioc-devel–adjacent); exact source and version must be confirmed and pinned via renv.
+- DEP2: expected to be sourced from GitHub (Bioc-devel�adjacent); exact source and version must be confirmed and pinned via renv.
 
 **Dependency Evolution Policy:**
 - Preprocessing methods expand post-V1; renv dependencies grow incrementally as capabilities are added.
@@ -181,7 +181,7 @@ Note: `renv::init()` may be deferred until initial dependency selection is confi
 **Persistence Boundaries (Policy):**
 - Project state persists to a project folder on disk with a project-level manifest that indexes workspaces and project metadata.
 - Each workspace persists to its own subfolder with a workspace-level manifest (workspace metadata, paths, schema versions); exports are bundled at the workspace level.
-- App-level state maintains a lightweight local registry of recently opened project paths for UI convenience; this registry is not authoritative, is safe to lose, and stores only paths/metadata needed to populate “recent projects” with graceful handling of moved or missing paths.
+- App-level state maintains a lightweight local registry of recently opened project paths for UI convenience; this registry is not authoritative, is safe to lose, and stores only paths/metadata needed to populate �recent projects� with graceful handling of moved or missing paths.
 - Raw inputs may be detached from memory but remain on disk for reconstruction.
 - Workspace persistence baseline (V1): serialize the OmicsWorkspace object (including OmicsDataset + UI params + workflow state) to R-native format; store raw inputs and non-memory artifacts in workspace subfolders referenced by the workspace manifest. The configured dataset does not need to persist as a fully materialized object and may be reconstructed from raw input and provenance when needed.
 - Export/import baseline (V1): export bundles the workspace object plus required on-disk artifacts (raw data, provenance, internal DB artifacts) into a portable package; import creates a new workspace subfolder and restores from the bundle.
@@ -221,14 +221,15 @@ Note: `renv::init()` may be deferred until initial dependency selection is confi
 - Constants/enums: `UPPER_SNAKE_CASE` where needed (e.g., `STEP_LOCKED`)
 
 **File & Module Naming:**
-- R files: `snake_case.R`
-- Module folders: grouped by workflow phase and step (e.g., `modules/configuration/step_01_import`)
+- R files: `snake_case.R` with responsibility prefixes (e.g., `domain_omics_project.R`, `persistence_path_resolver.R`, `services_project_service.R`, `state_app_session_state.R`)
+- `R/` subfolders are not used for code because R does not auto-source them; only root-level files are guaranteed to load
+- Shiny module code lives in root `R/` as `mod_*` files (e.g., `mod_project_dashboard_ui.R`); optional `R/modules/` is assets-only and may be omitted
 
 ### Structure Patterns
 
 **Project Organization (golem):**
-- `R/` for domain logic, services, and shared utilities
-- `R/modules/` for UI modules grouped by workflow steps
+- `R/` root contains domain, state, persistence, provenance, services, and utils code using prefixed filenames
+- `R/modules/` is optional and assets-only; no module code lives under `R/` subfolders
 - `inst/` for static assets and templates
 - `tests/` for testthat, with headless domain logic first
 
@@ -305,129 +306,110 @@ Note: `renv::init()` may be deferred until initial dependency selection is confi
 
 ```
 OMNI_OMICS_HUB/
-├─ DESCRIPTION
-├─ NAMESPACE
-├─ README.md
-├─ renv.lock
-├─ renv/
-├─ .Rbuildignore
-├─ .gitignore
-├─ R/
-│  ├─ app_ui.R
-│  ├─ app_server.R
-│  ├─ domain/
-│  │  ├─ omics_project.R
-│  │  ├─ omics_workspace.R
-│  │  ├─ omics_dataset.R
-│  │  ├─ db_manager.R
-│  │  └─ registry.R
-│  ├─ state/
-│  │  ├─ workflow_state.R
-│  │  ├─ step_status.R
-│  │  ├─ validation_rules.R
-│  │  └─ invalidation_rules.R
-│  ├─ persistence/
-│  │  ├─ path_resolver.R
-│  │  ├─ project_manifest.R
-│  │  ├─ workspace_manifest.R
-│  │  ├─ workspace_store.R
-│  │  └─ export_import.R
-│  ├─ provenance/
-│  │  ├─ provenance_writer.R
-│  │  └─ provenance_schema.R
-│  ├─ services/
-│  │  ├─ import_service.R
-│  │  ├─ mapping_service.R
-│  │  ├─ preprocessing_service.R
-│  │  └─ registry_service.R
-│  ├─ modules/
-│  │  ├─ workspace_nav/
-│  │  │  ├─ mod_workspace_nav_ui.R
-│  │  │  └─ mod_workspace_nav_server.R
-│  │  ├─ workspace_stepper/
-│  │  │  ├─ mod_workspace_stepper_ui.R
-│  │  │  └─ mod_workspace_stepper_server.R
-│  │  ├─ project_dashboard/
-│  │  │  ├─ mod_project_dashboard_ui.R
-│  │  │  └─ mod_project_dashboard_server.R
-│  │  ├─ workspace_dashboard/
-│  │  │  ├─ mod_workspace_dashboard_ui.R
-│  │  │  └─ mod_workspace_dashboard_server.R
-│  │  ├─ configuration/
-│  │  │  ├─ step_00_properties/
-│  │  │  ├─ step_01_import/
-│  │  │  ├─ step_02_mapping/
-│  │  │  ├─ step_03_rowdata/
-│  │  │  └─ step_04_coldata/
-│  │  └─ preprocessing/
-│  │     ├─ step_01_filtering/
-│  │     ├─ step_02_normalization/
-│  │     ├─ step_03_imputation_scaling/
-│  │     └─ step_04_variable_features_dr/
-│  └─ utils/
-│     ├─ config_defaults.R
-│     ├─ ui_helpers.R
-│     ├─ error_helpers.R
-│     └─ logging.R
-├─ inst/
-│  ├─ assets/
-│  │  ├─ icons/
-│  │  └─ images/
-│  └─ config/
-│     ├─ theme.json
-│     ├─ defaults.json
-│     └─ registry_defaults.yaml
-├─ tests/
-│  ├─ testthat/
-│  │  ├─ test-domain-omics_project.R
-│  │  ├─ test-domain-omics_workspace.R
-│  │  ├─ test-domain-omics_dataset.R
-│  │  ├─ test-state-workflow.R
-│  │  ├─ test-provenance.R
-│  │  └─ test-persistence.R
-│  └─ shinytest2/
-│     └─ test-e2e-core-flow.R
-└─ man/
+|-- DESCRIPTION
+|-- NAMESPACE
+|-- README.md
+|-- renv.lock
+|-- renv/
+|-- .Rbuildignore
+|-- .gitignore
+|-- R/
+|   |-- app_ui.R
+|   |-- app_server.R
+|   |-- domain_omics_project.R
+|   |-- domain_omics_workspace.R
+|   |-- domain_omics_dataset.R
+|   |-- domain_db_manager.R
+|   |-- domain_registry.R
+|   |-- state_workflow_state.R
+|   |-- state_step_status.R
+|   |-- state_validation_rules.R
+|   |-- state_invalidation_rules.R
+|   |-- persistence_path_resolver.R
+|   |-- persistence_project_manifest.R
+|   |-- persistence_workspace_manifest.R
+|   |-- persistence_workspace_store.R
+|   |-- persistence_export_import.R
+|   |-- provenance_provenance_writer.R
+|   |-- provenance_provenance_schema.R
+|   |-- services_import_service.R
+|   |-- services_mapping_service.R
+|   |-- services_preprocessing_service.R
+|   |-- services_registry_service.R
+|   |-- mod_workspace_nav_ui.R
+|   |-- mod_workspace_nav_server.R
+|   |-- mod_workspace_stepper_ui.R
+|   |-- mod_workspace_stepper_server.R
+|   |-- mod_project_dashboard_ui.R
+|   |-- mod_project_dashboard_server.R
+|   |-- mod_workspace_dashboard_ui.R
+|   |-- mod_workspace_dashboard_server.R
+|   |-- mod_configuration_step_*.R
+|   |-- mod_preprocessing_step_*.R
+|   |-- modules/ (optional assets only)
+|   |-- utils_config_defaults.R
+|   |-- utils_ui_helpers.R
+|   |-- utils_error_helpers.R
+|   `-- utils_logging.R
+|-- inst/
+|   |-- assets/
+|   |   |-- icons/
+|   |   `-- images/
+|   `-- config/
+|       |-- theme.json
+|       |-- defaults.json
+|       `-- registry_defaults.yaml
+|-- tests/
+|   |-- testthat/
+|   |   |-- test-domain-omics_project.R
+|   |   |-- test-domain-omics_workspace.R
+|   |   |-- test-domain-omics_dataset.R
+|   |   |-- test-state-workflow.R
+|   |   |-- test-provenance.R
+|   |   `-- test-persistence.R
+|   `-- shinytest2/
+|       `-- test-e2e-core-flow.R
+`-- man/
 ```
 
 ### Architectural Boundaries
 
 **Modules Boundary:**
-- `R/modules/` contains Shiny modules only (UI + server). No direct file IO or persistence logic.
+- Shiny module code lives in root `R/` as `mod_*` files; no module code under `R/` subfolders. Optional `R/modules/` is assets-only.
 - `workspace_nav` and `workspace_stepper` are reusable workspace-scoped modules driven by the authoritative workspace state model.
 
 **Domain Boundary:**
-- `R/domain/` defines the authoritative objects and invariants (OmicsProject/Workspace/Dataset).
+- `R/` root files prefixed `domain_` define the authoritative objects and invariants (OmicsProject/Workspace/Dataset).
 
 **State Boundary:**
-- `R/state/` owns workflow state, step status, validation rules, and invalidation rules (kept distinct).
+- `R/` root files prefixed `state_` own workflow state, step status, validation rules, and invalidation rules (kept distinct).
 
 **Persistence Boundary:**
-- `R/persistence/` owns all file path resolution, manifests, storage, and export/import.
+- `R/` root files prefixed `persistence_` own all file path resolution, manifests, storage, and export/import.
 
 **Provenance Boundary:**
-- `R/provenance/` owns provenance schema and writes; immutable after commit.
+- `R/` root files prefixed `provenance_` own provenance schema and writes; immutable after commit.
 
 **Service Boundary:**
-- `R/services/` orchestrates domain + state + persistence for actions (import, mapping, preprocessing).
+- `R/` root files prefixed `services_` orchestrate domain + state + persistence for actions (import, mapping, preprocessing).
 
 **Utility Boundary:**
-- `R/utils/` holds cross-cutting helpers (logging, UI helpers, error helpers).
+- `R/` root files prefixed `utils_` hold cross-cutting helpers (logging, UI helpers, error helpers).
 
 ### Requirements to Structure Mapping
 
 **Feature/Epic Mapping:**
-- Project/Workspace lifecycle: `R/domain/`, `R/services/`, `R/modules/project_dashboard/`, `R/modules/workspace_dashboard/`
-- Workspace navigation + progress: `R/modules/workspace_nav/`, `R/modules/workspace_stepper/`, `R/state/`
-- Configuration Steps 0–4: `R/modules/configuration/`, `R/state/`, `R/services/import_service.R`
-- Preprocessing flow: `R/modules/preprocessing/`, `R/services/preprocessing_service.R`
-- Feature mapping & DB Manager: `R/domain/db_manager.R`, `R/services/mapping_service.R`
-- Provenance/logging: `R/provenance/`, `R/utils/logging.R`
+- Project/Workspace lifecycle: `R/domain_*.R`, `R/services_*.R`, `R/mod_project_dashboard_*`, `R/mod_workspace_dashboard_*`
+- Workspace navigation + progress: `R/mod_workspace_nav_*`, `R/mod_workspace_stepper_*`, `R/state_*.R`
+- Configuration Steps 0?4: `R/mod_configuration_step_*`, `R/state_*.R`, `R/services_import_service.R`
+- Preprocessing flow: `R/mod_preprocessing_step_*`, `R/services_preprocessing_service.R`
+- Feature mapping & DB Manager: `R/domain_db_manager.R`, `R/services_mapping_service.R`
+- Provenance/logging: `R/provenance_*.R`, `R/utils_logging.R`
 
 **Cross-Cutting Concerns:**
-- Deterministic state restore: `R/state/`, `R/persistence/`, `R/provenance/`
-- Apply/Run/Save commit boundaries: `R/state/`, `R/provenance/`, `R/persistence/`
-- Registry-driven capabilities: `R/domain/registry.R`, `R/services/registry_service.R`
+- Deterministic state restore: `R/state_*.R`, `R/persistence_*.R`, `R/provenance_*.R`
+- Apply/Run/Save commit boundaries: `R/state_*.R`, `R/provenance_*.R`, `R/persistence_*.R`
+- Registry-driven capabilities: `R/domain_registry.R`, `R/services_registry_service.R`
 
 ### Integration Points
 
@@ -440,7 +422,7 @@ OMNI_OMICS_HUB/
 - Bioconductor/CRAN package adapters remain inside services or domain adapters; no module dependency.
 
 **Data Flow:**
-- Modules → services → domain/state → persistence/provenance for commits.
+- Modules ? services ? domain/state ? persistence/provenance for commits.
 - Modules read computed summaries via services (no direct domain mutation).
 
 ### File Organization Patterns
@@ -449,7 +431,7 @@ OMNI_OMICS_HUB/
 - `inst/config/` holds declarative defaults and theme assets only.
 
 **Source Organization:**
-- `R/` subfolders align to responsibility boundaries, not features-only or file-type-only.
+- `R/` root contains responsibility-prefixed files; subfolders under `R/` are not used for code (R does not auto-source them).
 
 **Test Organization:**
 - `tests/testthat/` for deterministic, headless domain tests.
@@ -471,7 +453,7 @@ OMNI_OMICS_HUB/
 
 ## Architecture Validation Results
 
-### Coherence Validation ✅
+### Coherence Validation ?
 
 **Decision Compatibility:**
 - Technology choices (Shiny + golem + bslib + renv) are consistent with the UX and workflow requirements.
@@ -485,7 +467,7 @@ OMNI_OMICS_HUB/
 - Project structure supports all defined boundaries (domain/state/persistence/provenance/modules).
 - Workspace nav and stepper are explicitly represented as reusable modules.
 
-### Requirements Coverage Validation ✅
+### Requirements Coverage Validation ?
 
 **Functional Requirements Coverage:**
 - Step-gated configuration/preprocessing, state restoration, provenance, DB Manager, and workspace import/export are all covered architecturally.
@@ -494,7 +476,7 @@ OMNI_OMICS_HUB/
 **Non-Functional Requirements Coverage:**
 - Local-first, reproducibility, crash-safe commits, and WCAG AA are explicitly addressed.
 
-### Implementation Readiness Validation ✅
+### Implementation Readiness Validation ?
 
 **Decision Completeness:**
 - Critical decisions are documented with V1 baselines and explicit policies.
@@ -525,25 +507,25 @@ OMNI_OMICS_HUB/
 
 ### Architecture Completeness Checklist
 
-**✅ Requirements Analysis**
+**? Requirements Analysis**
 - [x] Project context analyzed
 - [x] Scale and complexity assessed
 - [x] Technical constraints identified
 - [x] Cross-cutting concerns mapped
 
-**✅ Architectural Decisions**
+**? Architectural Decisions**
 - [x] Critical decisions documented
 - [x] Technology stack specified
 - [x] Persistence/provenance policies defined
 - [x] UX-driven navigation/progress captured
 
-**✅ Implementation Patterns**
+**? Implementation Patterns**
 - [x] Naming conventions established
 - [x] Structure patterns defined
 - [x] Communication patterns specified
 - [x] Process patterns documented
 
-**✅ Project Structure**
+**? Project Structure**
 - [x] Complete directory structure defined
 - [x] Component boundaries established
 - [x] Integration points mapped
@@ -670,3 +652,5 @@ The chosen starter template and architectural patterns provide a production-read
 **Next Phase:** Begin implementation using the architectural decisions and patterns documented herein.
 
 **Document Maintenance:** Update this architecture when major technical decisions are made during implementation.
+
+

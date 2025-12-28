@@ -1,0 +1,25 @@
+Package: OmniOmicsHub
+Title: Pablo
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "Pablo",
+           family = "",
+           role = c("aut", "cre"),
+           email = "pablo@example.com")
+Description: What the package does (one paragraph).
+License: Proprietary
+Imports: config, golem, shiny
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.1.1
+Suggests: testthat (>= 3.0.0)
+Config/testthat/edition: 3
+Collate: 'app_config.R' 'app_server.R' 'app_ui.R' 'run_app.R'
+        'persistence_path_resolver.R' 'persistence_project_manifest.R'
+        'domain_omics_project.R' 'state_app_session_state.R'
+        'services_project_service.R'
+        'modules/project_dashboard/mod_project_dashboard_ui.R'
+        'modules/project_dashboard/mod_project_dashboard_server.R'
+Author: Pablo [aut, cre]
+Maintainer: Pablo <pablo@example.com>
+Built: R 4.5.1; ; 2025-12-28 21:55:16 UTC; windows

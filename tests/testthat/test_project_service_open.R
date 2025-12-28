@@ -5,6 +5,9 @@ testthat::test_that("open_project loads manifest metadata and workspace registry
   reset_active_project <- OmniOmicsHub:::reset_active_project
 
   base_dir <- file.path(tempdir(), "open-project")
+  if (dir.exists(base_dir)) {
+    unlink(base_dir, recursive = TRUE, force = TRUE)
+  }
   dir.create(base_dir, recursive = TRUE, showWarnings = FALSE)
 
   created_project <- create_project("Open Project", base_dir)
@@ -28,6 +31,9 @@ testthat::test_that("open_project blocks missing or invalid manifests", {
   project_manifest_schema_version <- OmniOmicsHub:::project_manifest_schema_version
 
   base_dir <- file.path(tempdir(), "open-project-invalid")
+  if (dir.exists(base_dir)) {
+    unlink(base_dir, recursive = TRUE, force = TRUE)
+  }
   dir.create(base_dir, recursive = TRUE, showWarnings = FALSE)
 
   missing_root <- file.path(base_dir, "missing-manifest")

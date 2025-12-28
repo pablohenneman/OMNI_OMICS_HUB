@@ -30,6 +30,9 @@ create_project <- function(project_name, project_location) {
       if (file.exists(manifest_path)) {
         unlink(manifest_path)
       }
+      if (dir.exists(project_root)) {
+        unlink(project_root, recursive = TRUE, force = TRUE)
+      }
       stop(
         paste0("Failed to create project manifest: ", err$message),
         call. = FALSE
@@ -48,4 +51,38 @@ open_project <- function(project_root) {
   project <- omics_project_from_manifest(manifest, project_root)
   set_active_project(project)
   project
+}
+
+delete_project <- function(project_root, delete_fn = unlink) {
+  project_root <- normalize_project_root(project_root)
+
+  if (!dir.exists(project_root)) {
+    stop(
+      paste0("Project folder not found at: ", project_root, "."),
+      call. = FALSE
+    )
+  }
+
+  read_project_manifest(project_root)
+
+  delete_fn(project_root, recursive = TRUE, force = FALSE)
+  if (dir.exists(project_root)) {
+    stop(
+      paste0(
+        "Failed to delete project folder at: ",
+        project_root,
+        ". Ensure no files are open and you have permission."
+      ),
+      call. = FALSE
+    )
+  }
+
+  remove_recent_project(project_root)
+
+  active_project <- get_active_project()
+  if (!is.null(active_project) && identical(active_project@project_root, project_root)) {
+    reset_active_project()
+  }
+
+  invisible(TRUE)
 }
