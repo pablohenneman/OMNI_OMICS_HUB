@@ -1,0 +1,84 @@
+# generated: 2025-12-28
+# project: OMNI_OMICS_HUB
+# project_key: 
+# tracking_system: file-system
+# story_location: C:\Users\pablo\OneDrive\Bureaublad\dev\OMNI_OMICS_HUB\docs\implementation-artifacts
+
+# STATUS DEFINITIONS:
+# ==================
+# Epic Status:
+#   - backlog: Epic not yet started
+#   - in-progress: Epic actively being worked on
+#   - done: All stories in epic completed
+#
+# Epic Status Transitions:
+#   - backlog -> in-progress: Automatically when first story is created (via create-story)
+#   - in-progress -> done: Manually when all stories reach 'done' status
+#
+# Story Status:
+#   - backlog: Story only exists in epic file
+#   - ready-for-dev: Story file created in stories folder
+#   - in-progress: Developer actively working on implementation
+#   - review: Ready for code review (via Dev's code-review workflow)
+#   - done: Story completed
+#
+# Retrospective Status:
+#   - optional: Can be completed but not required
+#   - done: Retrospective has been completed
+#
+# WORKFLOW NOTES:
+# ===============
+# - Epic transitions to 'in-progress' automatically when first story is created
+# - Stories can be worked in parallel if team capacity allows
+# - SM typically creates next story after previous one is 'done' to incorporate learnings
+# - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
+
+generated: 2025-12-28
+project: OMNI_OMICS_HUB
+project_key: 
+tracking_system: file-system
+story_location: C:\Users\pablo\OneDrive\Bureaublad\dev\OMNI_OMICS_HUB\docs\implementation-artifacts
+
+development_status:
+  epic-1: in-progress
+  1-1-set-up-initial-project-from-golem-starter-template: done
+  1-2-create-and-open-project-with-manifest: backlog
+  1-3-delete-project-with-explicit-confirmation: backlog
+  1-4-create-open-and-delete-workspaces: backlog
+  1-5-persist-and-restore-last-committed-workspace-state: backlog
+  1-6-configure-development-environment: backlog
+  1-7-initialize-ci-pipeline-for-core-checks: backlog
+  epic-1-retrospective: optional
+  epic-2: backlog
+  2-1-establish-authoritative-domain-ownership-and-invariants: backlog
+  2-2-define-raw-input-storage-and-reconstruction-rules: backlog
+  2-3-enforce-headless-core-logic-and-derived-ui-state: backlog
+  2-4-define-workflow-state-machine-and-invalidation-rules: backlog
+  2-5-enforce-global-apply-run-save-execution-semantics: backlog
+  2-6-record-provenance-for-every-state-change: backlog
+  2-7-emit-non-authoritative-logs-separate-from-provenance: backlog
+  2-8-derive-resume-behavior-from-workflow-state: backlog
+  2-9-render-step-state-and-status-strip-without-mutating-state: backlog
+  epic-2-retrospective: optional
+  epic-3: backlog
+  3-1-configure-dataset-properties-step-0: backlog
+  3-2-import-data-with-preview-and-na-detection-step-1: backlog
+  3-3-assign-columns-to-expression-rowdata-ignore-step-2: backlog
+  3-4-configure-feature-ids-and-mapping-step-3: backlog
+  3-5-configure-sample-metadata-coldata-step-4: backlog
+  3-6-apply-ux-design-system-tokens-and-layout-patterns: backlog
+  3-7-provide-advanced-controls-expansion: backlog
+  epic-3-retrospective: optional
+  epic-4: backlog
+  4-1-filter-data-with-qc-guidance-preprocessing-step-1: backlog
+  4-2-normalize-data-with-diagnostics-preprocessing-step-2: backlog
+  4-3-impute-and-scale-data-with-tracked-rng-preprocessing-step-3: backlog
+  4-4-compute-variable-features-and-dimensionality-reduction-preprocessing-step-4: backlog
+  4-5-save-preprocessed-dataset-checkpoint: backlog
+  epic-4-retrospective: optional
+  epic-5: backlog
+  5-1-export-and-import-full-workspaces-as-portable-bundles: backlog
+  epic-5-retrospective: optional
+  epic-6: backlog
+  6-1-define-analysis-extension-interface-v1: backlog
+  epic-6-retrospective: optional

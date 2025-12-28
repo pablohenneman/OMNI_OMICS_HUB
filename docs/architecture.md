@@ -58,6 +58,9 @@ _This document builds collaboratively through step-by-step discovery. Sections a
 - Selecting Configuration/Preprocessing routes to the active step if incomplete, or the latest completed step if finished.
 - A reusable step/progress indicator shows configuration and preprocessing status with step-level states; it is always visible, can be collapsed on the workspace dashboard after completion, and remains fully visible on configuration/preprocessing screens.
 - The left nav and step/progress indicator are informational/guiding only and derive entirely from the authoritative workspace state model.
+- UI theming must implement the UX design system tokens (colors, typography, spacing) defined in the UX specification.
+- Advanced options are hidden by default via a global "Advanced" toggle and per-panel "See more" controls.
+- Terminology: OmicsWorkspace is canonical; OmicsAnalysis is legacy and reserved for downstream analysis modules.
 
 ### Technical Constraints & Dependencies
 

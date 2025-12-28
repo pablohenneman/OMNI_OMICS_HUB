@@ -41,6 +41,8 @@ A stepwise, gated workflow that delivers confidence and reproducibility for non-
 
 Classification signals: web app / dashboard UX, Shiny + bslib, scientific/omics data workflows, reproducibility and analysis readiness focus.
 
+Terminology: OmicsWorkspace is the canonical top-level container; OmicsAnalysis is a legacy synonym used only for downstream analysis modules.
+
 ## Success Criteria
 
 ### User Success
@@ -301,6 +303,8 @@ These journeys reveal the following capability requirements:
 - FR-35: Apply commits a single step; "Save Preprocessed Data" freezes state and unlocks downstream; dirty vs saved messaging is explicit and persistent.
 - FR-36: Provide Run/Provenance status strip and log visibility in-app with user/dev levels.
 - FR-37: Workspace export bundles internal DB artifacts referenced by the workspace for portability.
+- FR-38: Adopt the UX design system tokens (colors, typography, spacing) and panel/stepper layout patterns defined in the UX specification.
+- FR-39: Provide a global "Advanced" toggle and per-panel "See more" controls to keep advanced options hidden by default.
 
 ## Non-Functional Requirements
 
